@@ -17,20 +17,16 @@ function query($query){
 function registrasi($data){
     global $conn;
 
-    $namalengkap = stripcslashes($data["namalengkap"]);
-    $alamat = $data["alamat"];
-    $noTelepon = preg_replace("/[^0-9]/","",$data["notelp"]);
+    $namalengkap = htmlspecialchars(stripcslashes($data["namalengkap"]));
+    $alamat = htmlspecialchars($data["alamat"]);
+    $noTelepon = htmlspecialchars(preg_replace("/[^0-9]/","",$data["notelp"]));
+    $tempatlahir = htmlspecialchars($data["tmplahir"]);
+    $tglLahir = htmlspecialchars("$data[tgllahir]");
+    $username = htmlspecialchars(strtolower(stripcslashes($data["username"])));
+    $password = mysqli_real_escape_string($conn, $data["password"]);
+    $password2 = mysqli_real_escape_string($conn, $data["password2"]);
    
 }
 
 
 ?>
-
-<!-- nama lengkap = namalengkap
-alamat = alamat
-no telepon = notelp
-tempat lahir = tmplahir
-tanggal lahir = tgllahir
-username = username
-password = password
-verifikasi passowrd = password2 -->
