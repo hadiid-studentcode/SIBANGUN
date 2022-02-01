@@ -1,12 +1,12 @@
 <?php
 
- include "functions/function.php";
+include "function.php";
 
 if (isset($_POST["login"])) {
 
     if (login($_POST) > 0) {
         echo "<script>
-            alert ('sukses login !');
+            alert('sukses login !');
         </script>";
     } else {
         echo mysqli_error($conn);
@@ -45,25 +45,31 @@ if (isset($_POST["login"])) {
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="dist/css/util.css">
     <link rel="stylesheet" type="text/css" href="dist/css/main.css">
+
+    <style>
+        .alert{
+            color: red;
+            font-size: 14px;
+        }
+    </style>
     <!--===============================================================================================-->
 </head>
 
 <body>
-    
-
-<?php
-if (isset($_GET['pesan'])) {
-
-    if ($_GET['pesan'] == "gagal") {
-        echo "<div class = 'alert'>Username dan password tidak sesuai !</div>";
-    }
-}
-?>
 
 
     <div class="container-login100" style="background-image: url('dist/images/bg-02.jpg');">
         <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
             <form class="login100-form validate-form" action="" method="POST">
+
+                <?php
+                if (isset($_GET['pesan'])) {
+
+                    if ($_GET['pesan'] == "gagal") {
+                        echo "<div class = 'alert'>Username dan password tidak sesuai !</div>";
+                    }
+                }
+                ?>
 
                 <span class="login100-form-title p-b-37">
                     <img src="dist/images/icons/logo.png" class="" alt="..." width="100">
