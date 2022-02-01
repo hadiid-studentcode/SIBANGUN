@@ -47,7 +47,7 @@ function query($query){
 
 
             // alihkan ke halaman dashboard admin
-            header("Location:admin/halaman_admin.php");
+            header("Location:admin/dashboard.php");
 
         
 
@@ -60,7 +60,7 @@ function query($query){
             $_SESSION['level'] = 'pegawai';
 
             // alihkan ke halaman dashboard pegawai
-            header("Location:pegawai/halaman_pegawai.php");
+            header("Location:pegawai");
            
         }else{
             // alihkan ke halaman login kembali
