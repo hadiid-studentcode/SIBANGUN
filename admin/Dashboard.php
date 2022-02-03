@@ -42,7 +42,7 @@
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
      <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
-     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+     <link rel="icon" type="image/png" href="../dist/images/icons/logo.png">
 
      <title>SIBANGUN</title>
      <!--     Fonts and icons     -->
@@ -64,7 +64,7 @@
          <div class="sidenav-header">
              <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
              <a class="navbar-brand m-0" href="dashboard.php">
-                 <img src="../assets/img/logo-ct-dark.png" class="navbar-brand-img h-100" alt="main_logo">
+                 <img src="../dist/images/icons/logo.png" class="navbar-brand-img h-100" alt="main_logo">
                  <span class="ms-1 font-weight-bold">SIBANGUN</span>
              </a>
          </div>
@@ -83,7 +83,7 @@
                      <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Inventory</h6>
                  </li>
                  <li class="nav-item">
-                     <a class="nav-link " href="../pages/tables.html">
+                     <a class="nav-link " href="suplier.php">
                          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                              <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
                          </div>
@@ -102,7 +102,7 @@
                      <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Transaksi</h6>
                  </li>
                  <li class="nav-item">
-                     <a class="nav-link " href="#">
+                     <a class="nav-link " href="barangmasuk.php">
                          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                              <i class="ni ni-app text-info text-sm opacity-10"></i>
                          </div>
@@ -110,7 +110,7 @@
                      </a>
                  </li>
                  <li class="nav-item">
-                     <a class="nav-link " href="#">
+                     <a class="nav-link " href="transaksi.php">
                          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                              <i class="ni ni-world-2 text-danger text-sm opacity-10"></i>
                          </div>
@@ -121,7 +121,7 @@
                      <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Cetak</h6>
                  </li>
                  <li class="nav-item">
-                     <a class="nav-link " href="">
+                     <a class="nav-link " href="cetak.php">
                          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                              <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
                          </div>
@@ -132,7 +132,7 @@
                      <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">User</h6>
                  </li>
                  <li class="nav-item">
-                     <a class="nav-link " href="#">
+                     <a class="nav-link " href="usermanagement.php">
                          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                              <i class="ni ni-single-copy-04 text-warning text-sm opacity-10"></i>
                          </div>
@@ -193,13 +193,15 @@
                          <div class="card-body p-3">
                              <div class="row">
                                  <div class="col-8">
-                                     <div class="numbers">
-                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">TOTAL BARANG BANGUNAN</p>
-                                         <h5 class="font-weight-bolder">
-                                             10
-                                         </h5>
+                                     <a href="barang.php">
+                                         <div class="numbers">
+                                             <p class="text-sm mb-0 text-uppercase font-weight-bold">TOTAL BARANG BANGUNAN</p>
+                                             <h5 class="font-weight-bolder">
+                                                 <?php echo "$jumlah_barang"; ?>
+                                             </h5>
 
-                                     </div>
+                                         </div>
+                                     </a>
                                  </div>
                                  <div class="col-4 text-end">
                                      <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
@@ -215,13 +217,15 @@
                          <div class="card-body p-3">
                              <div class="row">
                                  <div class="col-8">
-                                     <div class="numbers">
-                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">TOTAL SUPPLIER</p>
-                                         <h5 class="font-weight-bolder">
-                                             <?php echo "$jumlah_supplier"; ?>
-                                         </h5>
+                                     <a href="suplier.php">
+                                         <div class="numbers">
+                                             <p class="text-sm mb-0 text-uppercase font-weight-bold">TOTAL SUPPLIER</p>
+                                             <h5 class="font-weight-bolder">
+                                                 <?php echo "$jumlah_supplier"; ?>
+                                             </h5>
 
-                                     </div>
+                                         </div>
+                                     </a>
                                  </div>
                                  <div class="col-4 text-end">
                                      <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
@@ -237,13 +241,15 @@
                          <div class="card-body p-3">
                              <div class="row">
                                  <div class="col-8">
-                                     <div class="numbers">
-                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">TOTAL STOK BARANG</p>
-                                         <h5 class="font-weight-bolder">
-                                             <?php echo "$stokBarang"; ?>
-                                         </h5>
+                                     <a href="barang.php">
+                                         <div class="numbers">
+                                             <p class="text-sm mb-0 text-uppercase font-weight-bold">TOTAL STOK BARANG</p>
+                                             <h5 class="font-weight-bolder">
+                                                 <?php echo "$stokBarang"; ?>
+                                             </h5>
 
-                                     </div>
+                                         </div>
+                                     </a>
                                  </div>
                                  <div class="col-4 text-end">
                                      <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
@@ -259,13 +265,15 @@
                          <div class="card-body p-3">
                              <div class="row">
                                  <div class="col-8">
-                                     <div class="numbers">
-                                         <p class="text-sm mb-0 text-uppercase font-weight-bold">TOTAL USER</p>
-                                         <h5 class="font-weight-bolder">
-                                             <?php echo "$jumlah_user"; ?>
-                                         </h5>
+                                     <a href="usermanagement.php">
+                                         <div class="numbers">
+                                             <p class="text-sm mb-0 text-uppercase font-weight-bold">TOTAL USER</p>
+                                             <h5 class="font-weight-bolder">
+                                                 <?php echo "$jumlah_user"; ?>
+                                             </h5>
 
-                                     </div>
+                                         </div>
+                                     </a>
                                  </div>
                                  <div class="col-4 text-end">
                                      <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
@@ -276,6 +284,7 @@
                          </div>
                      </div>
                  </div>
+
              </div>
 
 
@@ -288,8 +297,8 @@
                                      document.write(new Date().getFullYear())
                                  </script>,
                                  Copyright by
-                                 <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">SIBANGUN</a>
-                                 Sistem Informasi Bahan Bangunan
+                                 <a href="#" class="font-weight-bold" target="_blank">SIBANGUN</a>
+                                 Sistem Informasi Bahan Bangunan || HADIID ANDRI YULISON
                              </div>
                          </div>
 
