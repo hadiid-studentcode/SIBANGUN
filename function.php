@@ -71,6 +71,15 @@ function query($query){
     }
  }
 
+function hapus($id){
+    global $conn;
+    mysqli_query($conn, "DELETE FROM suplier WHERE id_suplier = $id");
+
+    return mysqli_affected_rows($conn);
+    
+
+}
+
 
 ?>
 

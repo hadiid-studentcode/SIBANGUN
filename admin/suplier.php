@@ -88,7 +88,7 @@
                          <td><?= $spl["keterangan"]; ?></td>
                          <td>
                              <a href="#">Ubah</a> |
-                             <a href="hapus.php?=<?= $spl["id_suplier"]; ?>">Hapus</a>
+                             <a href="../hapus.php?id=<?= $spl["id_suplier"]; ?>">Hapus</a>
                          </td>
 
                      </tr>
