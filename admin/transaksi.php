@@ -1,10 +1,14 @@
  <?php
-    session_start();
+    require '../function.php';
 
     // cek apakah yang mengakses halaman ini sudah login
     if ($_SESSION['level'] == "") {
         header("location:../index.php");
     }
+
+    $data = mysqli_query($conn, "SELECT * FROM transaksi JOIN user ON transaksi.id_user = user.id_user");
+
+
 
     ?>
  <!DOCTYPE html>
@@ -173,7 +177,7 @@
                      <div class="col-12 text-end">
                          <a class="btn bg-gradient-warning mb-0" href="#"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
                                  <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z" />
-                             </svg>&nbsp;&nbsp;Form Barang Masuk</a>
+                             </svg>&nbsp;&nbsp;Lakukan Transaksi</a>
                      </div>
                  </div>
                  <div class="card-body px-0 pt-0 pb-2">
@@ -183,19 +187,17 @@
                                  <tr>
                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Kode Transaksi</th>
-                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Masuk</th>
-                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Barang</th>
-                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Harga Beli</th>
-                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Harga Jual</th>
-                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Jumlah Masuk</th>
-                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Supplier</th>
-                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
+                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal</th>
+                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pembeli</th>
+                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sub Total</th>
+                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pembayaran</th>
+                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Keterangan</th>
                                      <th class="text-secondary opacity-7">Aksi</th>
                                  </tr>
 
                              </thead>
                              <?php $i = 1; ?>
-                             <?php while ($barangMasuk = mysqli_fetch_array($masuk)) : ?>
+                             <?php while ($transaksi = mysqli_fetch_array($data)) : ?>
                                  <tbody>
                                      <tr scope="row">
                                          <td>
@@ -208,39 +210,54 @@
                                              </div>
                                          </td>
                                          <td>
-                                             <p class="text-xs font-weight-bold mb-0"><?= $barangMasuk["kode_barang_masuk"]; ?></p>
+                                             <p class="text-xs font-weight-bold mb-0"><?= $transaksi["kode_transaksi"]; ?></p>
 
                                          </td>
                                          <td class="align-middle text-center text-sm">
-                                             <span class="badge badge-sm bg-gradient-success"><?= $barangMasuk["tanggal_masuk"]; ?></span>
+                                             <span class="badge badge-sm bg-gradient-success"><?= $transaksi["tanggal_transaksi"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["nama_barang"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["nama_pembeli"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["harga_beli"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["sub_total"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["harga_jual"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["jenis_pembayaran"]; ?></span>
                                          </td>
 
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["jumlah_masuk"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["Keterangan"]; ?></span>
                                          </td>
-                                         <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["nama_suplier"]; ?></span>
-                                         </td>
-                                         <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["nama"]; ?></span>
-                                         </td>
+
 
                                          <td class="align-middle">
                                              <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                 Edit ||
-                                             </a>
-                                             <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                 Hapus
-                                             </a>
+                                                 <button type="button" class="btn ">
+                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF8C00" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                                     </svg>
+
+                                                 </button>
+                                                 <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                     <button type="button" class="btn ">
+                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF8C00" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                                                         </svg>
+
+                                                     </button>
+                                                 </a>
+                                                 <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                     <button type="button" class="btn">
+                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                                         </svg>
+
+                                                     </button>
+                                                 </a>
                                          </td>
                                      </tr>
 
