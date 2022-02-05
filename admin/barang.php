@@ -192,7 +192,7 @@
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Harga Pokok</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Harga Jual</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
-                                     <th class="text-secondary opacity-7">Aksi</th>
+                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
                                  </tr>
                              </thead>
                              <?php $i = 1; ?>

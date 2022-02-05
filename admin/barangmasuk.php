@@ -4,7 +4,7 @@
     $masuk = mysqli_query($conn, "SELECT * FROM barang_masuk JOIN user ON barang_masuk.id_user = user.id_user JOIN barang ON barang_masuk.kode_barang = barang.kode_barang JOIN suplier ON barang_masuk.id_suplier = suplier.id_suplier ");
 
 
-                
+
 
 
 
@@ -207,7 +207,7 @@
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Jumlah Masuk</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Supplier</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
-                                     <th class="text-secondary opacity-7">Aksi</th>
+                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
                                  </tr>
 
                              </thead>
@@ -248,7 +248,7 @@
                                              <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["nama_suplier"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["nama"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["username"]; ?></span>
                                          </td>
 
                                          <td class="align-middle">
@@ -276,7 +276,7 @@
                                                          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                                                          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                                                      </svg>
-                                                   
+
                                                  </button>
                                              </a>
                                          </td>
