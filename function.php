@@ -1,12 +1,15 @@
 <?php
 
+
+
 // mengaktifkan session pada php
 session_start();
 
 // koneksi ke database
-$conn= mysqli_connect("localhost", "root", "", "sibangun");
+$conn = mysqli_connect("localhost", "root", "", "sibangun");
 
-function query($query){
+function query($query)
+{
     global $conn;
     $result = mysqli_query($conn, $query);
     $row = [];
@@ -14,11 +17,11 @@ function query($query){
         $rows[] = $row;
     }
     return $rows;
-
 }
 
- function login ($log){
-     global $conn;
+function login($log)
+{
+    global $conn;
 
     //  menangkap data yang dikirim dari form login
     $username = $log['username'];
@@ -28,32 +31,32 @@ function query($query){
     $login = mysqli_query($conn, "SELECT *FROM user WHERE username = '$username' AND password = '$password'");
     // menghitung jumlah data yang ditemukan pada database
     $cek = mysqli_num_rows($login);
-    
+
     // cek apakah username dan password ditemukan pada database
     if ($cek > 0) {
-        
+
         $data = mysqli_fetch_assoc($login);
-        
+
         // cek jika user login sebagai admin
         if ($data['level'] == 'admin') {
-            
-            
+
+
             // buat session login dan username
-            
+
             $_SESSION['username'] = $username;
             $_SESSION['level'] = 'admin';
-           
+
 
 
 
             // alihkan ke halaman dashboard admin
             header("Location:admin/dashboard.php");
 
-        
+
 
             // cek jika user login sebagai pegawai
-        } elseif($data['level'] == 'pegawai') {
-            
+        } elseif ($data['level'] == 'pegawai') {
+
             // buat session login dan username
 
             $_SESSION['username'] = $username;
@@ -61,35 +64,84 @@ function query($query){
 
             // alihkan ke halaman dashboard pegawai
             header("Location:pegawai");
-           
-        }else{
+        } else {
             // alihkan ke halaman login kembali
             header("Location:index.php?pesan=gagal");
         }
     } else {
         header("Location:index.php?pesan=gagal");
     }
- }
+}
 
-function hapus($id){
+function hapus($id)
+{
     global $conn;
     mysqli_query($conn, "DELETE FROM suplier WHERE id_suplier = $id");
 
     return mysqli_affected_rows($conn);
-    
-
 }
 
 
-?>
+function tambah($data)
+{
+    
 
+    global $conn;
 
+    $nama = ($data["nama_supplier"]);
+    $telepon = ($data["notelp_supplier"]);
+    $alamat = ($data["alamat_supplier"]);
+    $keterangan = ($data["keterangan_supplier"]);
 
+    // query insert data
+    $query = "INSERT INTO suplier VALUES ('','$nama','$alamat','$telepon','$keterangan')";
+    mysqli_query($conn,$query);
 
+    return mysqli_affected_rows($conn);
 
+}
 
+function ubah($data){
+    global $conn;
+    $id = ($data['id_suplier']);
+    $nama = ($data["nama_supplier"]);
+    $telepon = ($data["notelp_supplier"]);
+    $alamat = ($data["alamat_supplier"]);
+    $keterangan = ($data["keterangan_supplier"]);
 
+    // query ubah data
+    $query = "UPDATE suplier SET
+                nama_suplier = '$nama',
+                  alamat_suplier = '$alamat',
+                no_telp_suplier = '$telepon',
+                keterangan = '$keterangan'
+                WHERE id_suplier = $id
+             ";
+    mysqli_query($conn, $query);
 
+    return mysqli_affected_rows($conn);
+    
+}
+
+function cari($keyword){
+  
+   global $conn;
+
+    $query = "SELECT * FROM suplier
+                WHERE
+                nama_suplier LIKE '%$keyword%' OR
+                 alamat_suplier LIKE '%$keyword%' OR
+                  no_telp_suplier LIKE '%$keyword%' OR
+                   keterangan LIKE '%$keyword%'
+                   
+
+               
+    
+    ";
+    
+
+    return mysqli_query($conn,$query);
+}
 
 
 
