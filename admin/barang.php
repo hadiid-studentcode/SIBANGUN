@@ -7,7 +7,10 @@
         header("location:../index.php");
     }
 
+
     ?>
+
+
  <!DOCTYPE html>
  <html lang="en">
 
@@ -189,7 +192,7 @@
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Barang</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Jenis Barang</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Satuan</th>
-                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Harga Pokok</th>
+                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Harga Barang</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Harga Jual</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
@@ -222,7 +225,7 @@
                                              <span class="text-secondary text-xs font-weight-bold"><?= $brg["satuan_barang"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $brg["harga_pokok"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $brg["harga_barang"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
                                              <span class="text-secondary text-xs font-weight-bold"><?= $brg["harga_jual"]; ?></span>
