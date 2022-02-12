@@ -11,20 +11,13 @@
     $masuk = mysqli_query($conn, "SELECT * FROM barang_masuk JOIN user ON barang_masuk.id_user = user.id_user JOIN suplier ON barang_masuk.id_suplier = suplier.id_suplier");
 
 
-    $suplier = mysqli_query($conn, "SELECT * FROM suplier");
-
-
-
-
-
-
     // tambah data barang masuk dari supplier
 
     // cek apakah tombol tambah barang sudah di submit
     if (isset($_POST["tambahdata"])) {
 
         // cek apakah barang masuk sudah ditambahkan atau tidak
-        if (tambah($_POST) > 0) {
+        if (tambahbarangmasuk($_POST) > 0) {
             echo "
             <script>
             alert ('data berhasil ditambahkan !');
@@ -34,7 +27,31 @@
         } else {
             echo "
             <script>
-            alert ('data gagal  ditambahkan !');
+            alert ('data gagal  diubah !');
+            document.location.href = 'barangmasuk.php';
+            </script>
+        ";
+        }
+    }
+
+
+    // ubah data barang masuk
+    // cek apakah tombil submit ubah sudah ditekan atau belum
+
+    if (isset($_POST["ubahbrg"])) {
+        // cek apakah data berhasil diubah atau tidak
+
+        if (ubahbrg($_POST) > 0) {
+            echo "
+            <script>
+            alert ('data berhasil diubah !');
+            document.location.href = 'barangmasuk.php';
+            </script>
+        ";
+        } else {
+            echo "
+            <script>
+            alert ('data gagal diubah !');
             document.location.href = 'barangmasuk.php';
             </script>
         ";
@@ -230,8 +247,17 @@
                                      <form action="" method="POST">
 
                                          <div class="mb-3">
+                                             <label for="tglmsk" class="form-label">Tanggal Masuk Barang</label>
+                                             <input type="date" class="form-control" id="tglmsk" name="tglmsk">
+                                         </div>
+
+                                         <div class="mb-3">
                                              <label for="nmbrgmsk" class="form-label">Nama Barang Masuk</label>
                                              <input type="text" class="form-control" id="nmbrgmsk" placeholder="masukkan nama barang" name="nmbrgmsk">
+                                         </div>
+                                         <div class="mb-3">
+                                             <label for="jnsbrgmsk" class="form-label">Jenis Barang Masuk</label>
+                                             <input type="text" class="form-control" id="jnsbrgmsk" placeholder="masukkan Jenis barang" name="jnsbrgmsk">
                                          </div>
                                          <div class="mb-3">
                                              <label for="hrgbeli" class="form-label">Harga Beli Barang Masuk</label>
@@ -251,9 +277,25 @@
 
                                              <select name="nmspl" id="nmspl">
                                                  <option selected>Choose..</option>
+                                                 <?php $suplier = mysqli_query($conn, "SELECT id_suplier, nama_suplier FROM suplier"); ?>
                                                  <?php while ($spl = mysqli_fetch_array($suplier)) : ?>
                                                      <option value=<?= $spl["id_suplier"]; ?>><?= $spl["nama_suplier"]; ?></option>
                                                  <?php endwhile; ?>
+                                             </select>
+
+                                         </div>
+                                         <div class="mb-3" hidden="true">
+                                             <label for=" nmusr" class="form-label">User</label>
+
+
+
+                                             <?php $usr = $_SESSION['username']; ?>
+                                             <?php $user = mysqli_query($conn, "SELECT id_user, username FROM user WHERE username = '$usr'"); ?>
+                                             <?php $usr = mysqli_fetch_array($user); ?>
+
+                                             <input type="text" name="nmusr" id="nmusr" value="<?= $usr["id_user"]; ?>">
+
+
                                              </select>
 
                                          </div>
@@ -344,8 +386,8 @@
 
                                                  </button>
 
-                                                 <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                     <button type="button" class="btn ">
+                                                 <a data-bs-toggle="modal" data-bs-target="#ubahbrg<?= $barangMasuk["kode_barang_masuk"]; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="ubahbrg">
+                                                     <button type=" button" class="btn ">
                                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF8C00" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                                              <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
                                                              <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
@@ -353,7 +395,85 @@
 
                                                      </button>
                                                  </a>
-                                                 <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                 <!-- Modal -->
+                                                 <div class="modal fade" id="ubahbrg<?= $barangMasuk['kode_barang_masuk']; ?>" tabindex="-1" aria-labelledby="ubahbrg" aria-hidden="true">
+                                                     <div class="modal-dialog">
+                                                         <div class="modal-content">
+                                                             <div class="modal-header">
+                                                                 <h5 class="modal-title" id="exampleModalLabel">Ubah Data barang masuk</h5>
+                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" name="ubahbrg"></button>
+                                                             </div>
+                                                             <div class="modal-body">
+                                                                 <!-- form -->
+                                                                 <form action="" method="POST">
+
+                                                                     <input type="hidden" name="kdbrgmsk" value="<?= $barangMasuk['kode_barang_masuk']; ?>">
+                                                                     <div class="mb-3">
+                                                                         <label for="nama_supplier" class="form-label">Nama Barang Masuk</label>
+                                                                         <input type="text" class="form-control" id="nmbrg" placeholder="ex : paku beton" name="nmbrg" value="<?= $barangMasuk['nama_barang']; ?>">
+                                                                     </div>
+                                                                     <div class="mb-3">
+                                                                         <label for="notelp_supplier" class="form-label">Jenis Barang Masuk</label>
+                                                                         <input type="text" class="form-control" id="jnsbrg" placeholder="ex : paku" name="jnsbrg" value="<?= $barangMasuk['jenis_barang']; ?>">
+                                                                     </div>
+                                                                     <div class="mb-3">
+                                                                         <label for="hrgbli" class="form-label">Harga Beli</label>
+                                                                         <input type="number" class="form-control" id="hrgbli" placeholder="ex: Rp.50000" name="hrgbli" value="<?= $barangMasuk['harga_beli']; ?>">
+                                                                     </div>
+                                                                     <div class="mb-3">
+                                                                         <label for="stnbrg" class="form-label">Satuan Barang</label>
+                                                                         <input type="text" class="form-control" id="stnbrg" placeholder="ex : m,kg,l" name="stnbrg" value="<?= $barangMasuk['satuan_barang']; ?>">
+                                                                     </div>
+
+                                                                     <div class="mb-3">
+                                                                         <label for="jmlmsk" class="form-label">Jumlah Masuk</label>
+                                                                         <input type="number" class="form-control" id="jmlmsk" placeholder="ex : 10" name="jmlmsk" value="<?= $barangMasuk['jumlah_masuk']; ?>">
+                                                                     </div>
+
+                                                                     <div class="mb-3">
+                                                                         <label for="nmspl" class="form-label">Supplier</label>
+
+
+                                                                         <select name="nmspl" id="nmspl">
+                                                                             <?php $suplier = mysqli_query($conn, "SELECT id_suplier, nama_suplier FROM suplier"); ?>
+                                                                             <?php while ($spl = mysqli_fetch_array($suplier)) : ?>
+                                                                                 <option value="<?= $spl["id_suplier"]; ?>"><?= $spl["nama_suplier"]; ?></option>
+
+                                                                             <?php endwhile; ?>
+                                                                         </select>
+
+                                                                     </div>
+                                                                     <div class="mb-3" hidden="true">
+                                                                         <label for=" nmusr" class="form-label">User</label>
+
+
+
+                                                                         <?php $usr = $_SESSION['username']; ?>
+                                                                         <?php $user = mysqli_query($conn, "SELECT id_user, username FROM user WHERE username = '$usr'"); ?>
+                                                                         <?php $usr = mysqli_fetch_array($user); ?>
+
+                                                                         <input type="text" name="nmusr" id="nmusr" value="<?= $usr["id_user"]; ?>">
+
+
+                                                                         </select>
+
+                                                                     </div>
+
+
+
+
+                                                             </div>
+                                                             <div class="modal-footer" name="ubahbrg">
+                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                                                 <button type="submit" class="btn btn-primary" name="ubahbrg" id="liveAlertBtn">Ubah Data</button>
+                                                             </div>
+                                                             </form>
+                                                             <!-- form -->
+                                                         </div>
+                                                     </div>
+                                                 </div>
+                                                 <!-- akhir modal -->
+                                                 <a href="../del/delmsk.php?kdbrgmsk=<?= $barangMasuk["kode_barang_masuk"]; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                                      <button type="button" class="btn">
                                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
                                                              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />

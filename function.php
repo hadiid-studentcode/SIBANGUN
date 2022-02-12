@@ -43,6 +43,7 @@ function login($log)
 
             // buat session login dan username
 
+
             $_SESSION['username'] = $username;
             $_SESSION['level'] = 'admin';
 
@@ -81,10 +82,20 @@ function hapus($id)
     return mysqli_affected_rows($conn);
 }
 
+function hapusbarangmasuk($i)
+{
+    global $conn;
+    mysqli_query($conn, "DELETE FROM barang_masuk WHERE kode_barang_masuk = $i");
+
+
+
+    return mysqli_affected_rows($conn);
+}
+
 
 function tambah($data)
 {
-    
+
 
     global $conn;
 
@@ -95,13 +106,47 @@ function tambah($data)
 
     // query insert data
     $query = "INSERT INTO suplier VALUES ('','$nama','$alamat','$telepon','$keterangan')";
-    mysqli_query($conn,$query);
+    mysqli_query($conn, $query);
 
     return mysqli_affected_rows($conn);
-
 }
 
-function ubah($data){
+function tambahbarangmasuk($data)
+{
+    global $conn;
+    $tanggal = ($data["tglmsk"]);
+    $namabarang = ($data["nmbrgmsk"]);
+    $jenisbarang = ($data["jnsbrgmsk"]);
+    $hargabeli = ($data["hrgbeli"]);
+    $satuanbarang = ($data["stnbrg"]);
+    $jumlahmasuk = ($data["jmlhmskbrg"]);
+    $suplier = ($data["nmspl"]);
+    $user = ($data["nmusr"]);
+
+
+
+    // insert barang masuk
+
+    $query = "INSERT INTO barang_masuk VALUES(
+            '',
+            '$tanggal',
+            '$namabarang',
+            '$jenisbarang',
+            '$hargabeli',
+            '$satuanbarang',
+            '$jumlahmasuk',
+            '$suplier',
+            '$user'
+    )";
+
+
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function ubah($data)
+{
     global $conn;
     $id = ($data['id_suplier']);
     $nama = ($data["nama_supplier"]);
@@ -120,12 +165,45 @@ function ubah($data){
     mysqli_query($conn, $query);
 
     return mysqli_affected_rows($conn);
-    
 }
 
-function cari($keyword){
-  
-   global $conn;
+function ubahbrg($data)
+{
+    global $conn;
+    $kdbarangmasuk = ($data['kdbrgmsk']);
+    $tanggalmasuk = date("Y-m-d");
+    $namabarang = ($data["nmbrg"]);
+    $jenisbarang = ($data["jnsbrg"]);
+    $hargabeli = ($data["hrgbli"]);
+    $satuanbarang = ($data["stnbrg"]);
+    $jumlahmasuk = ($data["jmlmsk"]);
+    $suplier = ($data["nmspl"]);
+    $user = ($data["nmusr"]);
+
+
+
+
+    // query ubah data
+    $query = "UPDATE barang_masuk SET
+                tanggal_masuk = '$tanggalmasuk',
+                  nama_barang = '$namabarang',
+                jenis_barang = '$jenisbarang',
+                harga_beli = '$hargabeli',
+                 satuan_barang = '$satuanbarang',
+                   jumlah_masuk = '$jumlahmasuk',
+                    id_suplier = '$suplier',
+                     id_user = '$user'
+                WHERE kode_barang_masuk = $kdbarangmasuk
+             ";
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+function cari($keyword)
+{
+
+    global $conn;
 
     $query = "SELECT * FROM suplier
                 WHERE
@@ -138,18 +216,7 @@ function cari($keyword){
                
     
     ";
-    
 
-    return mysqli_query($conn,$query);
+
+    return mysqli_query($conn, $query);
 }
-
-
-
-
-
-
-
-
-
-
-

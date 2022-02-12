@@ -214,7 +214,7 @@ $data = mysqli_query($conn, "SELECT * FROM barang JOIN barang_masuk ON barang.ko
                                            </div>
                                        </td>
                                        <td>
-                                           <p class="text-xs font-weight-bold mb-0"><?= $barang["kode_barang"]; ?></p>
+                                           <p class="text-xs font-weight-bold mb-0">B<?= $barang["kode_barang"]; ?></p>
 
                                        </td>
                                        <td class="align-middle text-center text-sm">
