@@ -1,5 +1,11 @@
  <?php
     require "../function.php";
+
+    // cek apakah yang mengakses halaman ini sudah login
+    if ($_SESSION['level'] == "") {
+        header("location:../index.php");
+    }
+
     $supplier = mysqli_query($conn, "SELECT * FROM suplier");
 
     // tombol cari ditekan
@@ -9,11 +15,6 @@
     }
 
 
-
-    // cek apakah yang mengakses halaman ini sudah login
-    if ($_SESSION['level'] == "") {
-        header("location:../index.php");
-    }
 
     // tambah data supplier
 

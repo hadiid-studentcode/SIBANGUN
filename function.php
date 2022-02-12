@@ -220,3 +220,28 @@ function cari($keyword)
 
     return mysqli_query($conn, $query);
 }
+
+function caribarang($keyword){
+    global $conn;
+
+
+    $query = "SELECT * FROM barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk
+                WHERE
+                kode_barang LIKE '%$keyword%' OR
+                 nama_barang LIKE '%$keyword%' OR
+                  jenis_barang LIKE '%$keyword%' OR
+                   satuan_barang LIKE '%$keyword%' OR
+                    harga_beli LIKE '%$keyword%' OR
+                    harga_jual LIKE '%$keyword%' OR
+                     stok_barang LIKE '%$keyword%'
+                    
+                   
+   
+             
+    
+    ";
+  
+
+
+    return mysqli_query($conn, $query);
+}
