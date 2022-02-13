@@ -299,9 +299,10 @@
                                                  <option selected>Choose..</option>
                                                  <?php $suplier = mysqli_query($conn, "SELECT id_suplier, nama_suplier, keterangan FROM suplier"); ?>
                                                  <?php while ($spl = mysqli_fetch_array($suplier)) : ?>
-                                                     <option value=<?= $spl["id_suplier"]; ?>><?= $spl["nama_suplier"]; ?> - <?= $spl["keterangan"]; ?></option>
+                                                     <option value=<?= $spl["id_suplier"]; ?>><?= $spl["nama_suplier"]; ?> ( <?= $spl["keterangan"]; ?> ) </option>
                                                  <?php endwhile; ?>
                                              </select>
+                                             
 
                                          </div>
                                          <div class="mb-3" hidden="true">
@@ -417,7 +418,7 @@
 
                                                 
                                                
-                                                 <a href="../del/delmsk.php?kdbrgmsk=<?= $barangMasuk["kode_barang_masuk"]; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="del barang user">
+                                                 <a href="../del/delmsk.php?kdbrgmsk=<?= $barangMasuk["kode_barang_masuk"]; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="del barang masuk">
                                                      <button type="button" class="btn">
                                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
                                                              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />

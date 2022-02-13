@@ -92,6 +92,14 @@ function hapusbarangmasuk($i)
     return mysqli_affected_rows($conn);
 }
 
+function hapusbarang($d){
+    global $conn;
+    mysqli_query($conn, "DELETE FROM barang WHERE kode_barang = $d");
+
+
+
+    return mysqli_affected_rows($conn);
+}
 
 function tambah($data)
 {
@@ -368,7 +376,7 @@ function tambahstokbarang($data)
     mysqli_query($conn, $query);
     mysqli_query($conn, $querystat);
 
-    die;
+   
 
     return mysqli_affected_rows($conn);
 }
