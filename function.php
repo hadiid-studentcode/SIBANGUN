@@ -116,12 +116,12 @@ function tambahbarangmasuk($data)
     global $conn;
     $tanggal = ($data["tglmsk"]);
     $namabarang = ($data["nmbrgmsk"]);
-    $jenisbarang = ($data["jnsbrgmsk"]);
     $hargabeli = ($data["hrgbeli"]);
     $satuanbarang = ($data["stnbrg"]);
     $jumlahmasuk = ($data["jmlhmskbrg"]);
     $suplier = ($data["nmspl"]);
     $user = ($data["nmusr"]);
+    $stat = ($data["status"]);
 
 
 
@@ -131,13 +131,14 @@ function tambahbarangmasuk($data)
             '',
             '$tanggal',
             '$namabarang',
-            '$jenisbarang',
             '$hargabeli',
             '$satuanbarang',
             '$jumlahmasuk',
             '$suplier',
-            '$user'
+            '$user',
+            '$stat'
     )";
+
 
 
     mysqli_query($conn, $query);
@@ -221,7 +222,8 @@ function cari($keyword)
     return mysqli_query($conn, $query);
 }
 
-function caribarang($keyword){
+function caribarang($keyword)
+{
     global $conn;
 
 
@@ -240,8 +242,110 @@ function caribarang($keyword){
              
     
     ";
-  
+
 
 
     return mysqli_query($conn, $query);
+}
+
+function caribarangmsk($keyword)
+{
+    global $conn;
+
+    $query = "SELECT * FROM barang_masuk JOIN user ON barang_masuk.id_user = user.id_user JOIN suplier ON barang_masuk.id_suplier = suplier.id_suplier
+            WHERE
+            kode_barang_masuk LIKE '%$keyword%' OR
+                 tanggal_masuk LIKE '%$keyword%' OR
+                  nama_barang LIKE '%$keyword%' OR
+                   jenis_barang LIKE '%$keyword%' OR
+                    harga_beli LIKE '%$keyword%' OR
+                    satuan_barang LIKE '%$keyword%' OR
+                     jumlah_masuk LIKE '%$keyword%' OR
+                      nama_suplier LIKE '%$keyword%' OR
+                       username LIKE '%$keyword%'
+
+
+
+    ";
+
+
+
+    return mysqli_query($conn, $query);
+}
+
+function tambahstokbarang($data)
+{
+    global $conn;
+
+
+    $ambiljumlahmasuk = mysqli_query($conn, "SELECT jumlah_masuk from barang_masuk where kode_barang_masuk = '$data'");
+    $ambilstokbarang = mysqli_query($conn, "SELECT stok_barang FROM barang WHERE kode_barang_masuk = '$data'");
+
+    $jumlahmasuk = mysqli_fetch_assoc($ambiljumlahmasuk);
+    $stokbarang = mysqli_fetch_array($ambilstokbarang);
+
+
+
+
+
+    if (!$stokbarang == NULL) {
+        $jumlahmasuk1 = $jumlahmasuk['jumlah_masuk'];
+        $stokbarang1 = $stokbarang['stok_barang'];
+
+        $hasil = $jumlahmasuk1 + $stokbarang1;
+        // query tambah stok 
+        $query = "UPDATE barang SET
+                stok_barang = '$hasil'
+                WHERE kode_barang_masuk = '$data'
+             ";
+
+        // ubah barang masuk menjadi ACC 
+        $querystat = "UPDATE barang_masuk SET
+                status_barang_masuk = 'ACC'
+                WHERE kode_barang_masuk = '$data'
+             ";
+
+    } else {
+
+
+
+
+        // keluarkan data dari tabel barang_masuk
+        $query1 = mysqli_query($conn, "SELECT jumlah_masuk FROM barang_masuk WHERE kode_barang_masuk = '$data'");
+
+        $data1 = mysqli_fetch_assoc($query1);
+        $jumlah_masuk = $data1['jumlah_masuk'];
+
+
+
+
+
+
+
+        // query barang_masuk ke tabel barang
+
+
+
+        $query = "INSERT INTO barang VALUES(
+            '',
+            '$data',
+            'NULL',
+            '$jumlah_masuk'
+    )";
+
+        // ubah barang masuk menjadi ACC 
+        $querystat = "UPDATE barang_masuk SET
+                status_barang_masuk = 'ACC'
+                WHERE kode_barang_masuk = '$data'
+             ";
+    }
+
+
+
+    mysqli_query($conn, $query);
+    mysqli_query($conn, $querystat);
+
+    die;
+
+    return mysqli_affected_rows($conn);
 }

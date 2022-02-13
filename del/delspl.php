@@ -10,6 +10,7 @@ if ( hapus($id) > 0 ) {
             <script>
             alert ('data berhasil dihapuskan !');
             document.location.href = '../admin/suplier.php';
+             
             </script>
         ";
 } else {

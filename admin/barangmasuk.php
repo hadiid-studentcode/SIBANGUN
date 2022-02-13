@@ -58,7 +58,21 @@
         }
     }
 
+
+
+
+    // tombol cari ditekan
+
+    if (isset($_POST['caribrg'])) {
+        $masuk = caribarangmsk($_POST['keyword']);
+    }
+
+
+
+
     ?>
+
+
 
  <!DOCTYPE html>
  <html lang="en">
@@ -81,6 +95,7 @@
      <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
      <!-- CSS Files -->
      <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.0.0" rel="stylesheet" />
+
  </head>
 
  <body class="g-sidenav-show   bg-gray-100">
@@ -183,9 +198,17 @@
                  </nav>
                  <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                      <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                         <div class="input-group">
-                             <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                             <input type="text" class="form-control" placeholder="Cari Barang Masuk...">
+                         <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                             <!-- form pencarian -->
+                             <form action="" method="POST">
+                                 <div class="input-group">
+                                     <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                                     <button type="submit" name="caribrg" id="tombol-cari-barang-masuk" hidden='true'>Cari</button>
+                                     <input type="text" class="form-control" autofocus autocomplete="off" id="keyword" placeholder="Cari barang.." name="keyword">
+
+                                 </div>
+                             </form>
+                             <!-- akhir form pencarian -->
                          </div>
                      </div>
                      <ul class="navbar-nav  justify-content-end">
@@ -226,9 +249,9 @@
 
 
                      <div data-bs-toggle="modal" data-bs-target="#tambahdata" style="float: right;">
-                         <button class="btn bg-gradient-primary mb-0" href="#"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-dotted" viewBox="0 0 16 16">
+                         <button class="btn bg-gradient-warning mb-0" href="#"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-dotted" viewBox="0 0 16 16">
                                  <path d="M8 0c-.176 0-.35.006-.523.017l.064.998a7.117 7.117 0 0 1 .918 0l.064-.998A8.113 8.113 0 0 0 8 0zM6.44.152c-.346.069-.684.16-1.012.27l.321.948c.287-.098.582-.177.884-.237L6.44.153zm4.132.271a7.946 7.946 0 0 0-1.011-.27l-.194.98c.302.06.597.14.884.237l.321-.947zm1.873.925a8 8 0 0 0-.906-.524l-.443.896c.275.136.54.29.793.459l.556-.831zM4.46.824c-.314.155-.616.33-.905.524l.556.83a7.07 7.07 0 0 1 .793-.458L4.46.824zM2.725 1.985c-.262.23-.51.478-.74.74l.752.66c.202-.23.418-.446.648-.648l-.66-.752zm11.29.74a8.058 8.058 0 0 0-.74-.74l-.66.752c.23.202.447.418.648.648l.752-.66zm1.161 1.735a7.98 7.98 0 0 0-.524-.905l-.83.556c.169.253.322.518.458.793l.896-.443zM1.348 3.555c-.194.289-.37.591-.524.906l.896.443c.136-.275.29-.54.459-.793l-.831-.556zM.423 5.428a7.945 7.945 0 0 0-.27 1.011l.98.194c.06-.302.14-.597.237-.884l-.947-.321zM15.848 6.44a7.943 7.943 0 0 0-.27-1.012l-.948.321c.098.287.177.582.237.884l.98-.194zM.017 7.477a8.113 8.113 0 0 0 0 1.046l.998-.064a7.117 7.117 0 0 1 0-.918l-.998-.064zM16 8a8.1 8.1 0 0 0-.017-.523l-.998.064a7.11 7.11 0 0 1 0 .918l.998.064A8.1 8.1 0 0 0 16 8zM.152 9.56c.069.346.16.684.27 1.012l.948-.321a6.944 6.944 0 0 1-.237-.884l-.98.194zm15.425 1.012c.112-.328.202-.666.27-1.011l-.98-.194c-.06.302-.14.597-.237.884l.947.321zM.824 11.54a8 8 0 0 0 .524.905l.83-.556a6.999 6.999 0 0 1-.458-.793l-.896.443zm13.828.905c.194-.289.37-.591.524-.906l-.896-.443c-.136.275-.29.54-.459.793l.831.556zm-12.667.83c.23.262.478.51.74.74l.66-.752a7.047 7.047 0 0 1-.648-.648l-.752.66zm11.29.74c.262-.23.51-.478.74-.74l-.752-.66c-.201.23-.418.447-.648.648l.66.752zm-1.735 1.161c.314-.155.616-.33.905-.524l-.556-.83a7.07 7.07 0 0 1-.793.458l.443.896zm-7.985-.524c.289.194.591.37.906.524l.443-.896a6.998 6.998 0 0 1-.793-.459l-.556.831zm1.873.925c.328.112.666.202 1.011.27l.194-.98a6.953 6.953 0 0 1-.884-.237l-.321.947zm4.132.271a7.944 7.944 0 0 0 1.012-.27l-.321-.948a6.954 6.954 0 0 1-.884.237l.194.98zm-2.083.135a8.1 8.1 0 0 0 1.046 0l-.064-.998a7.11 7.11 0 0 1-.918 0l-.064.998zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z" />
-                             </svg>&nbsp;&nbsp;Tambah Barang Masuk</button>
+                             </svg>&nbsp;&nbsp; Form Barang Masuk</button>
                      </div>
                      <!-- modal -->
 
@@ -255,10 +278,7 @@
                                              <label for="nmbrgmsk" class="form-label">Nama Barang Masuk</label>
                                              <input type="text" class="form-control" id="nmbrgmsk" placeholder="masukkan nama barang" name="nmbrgmsk">
                                          </div>
-                                         <div class="mb-3">
-                                             <label for="jnsbrgmsk" class="form-label">Jenis Barang Masuk</label>
-                                             <input type="text" class="form-control" id="jnsbrgmsk" placeholder="masukkan Jenis barang" name="jnsbrgmsk">
-                                         </div>
+
                                          <div class="mb-3">
                                              <label for="hrgbeli" class="form-label">Harga Beli Barang Masuk</label>
                                              <input type="number" class="form-control" id="hrgbeli" placeholder="Masukkan harga beli barang" name="hrgbeli">
@@ -277,9 +297,9 @@
 
                                              <select name="nmspl" id="nmspl">
                                                  <option selected>Choose..</option>
-                                                 <?php $suplier = mysqli_query($conn, "SELECT id_suplier, nama_suplier FROM suplier"); ?>
+                                                 <?php $suplier = mysqli_query($conn, "SELECT id_suplier, nama_suplier, keterangan FROM suplier"); ?>
                                                  <?php while ($spl = mysqli_fetch_array($suplier)) : ?>
-                                                     <option value=<?= $spl["id_suplier"]; ?>><?= $spl["nama_suplier"]; ?></option>
+                                                     <option value=<?= $spl["id_suplier"]; ?>><?= $spl["nama_suplier"]; ?> - <?= $spl["keterangan"]; ?></option>
                                                  <?php endwhile; ?>
                                              </select>
 
@@ -298,6 +318,11 @@
 
                                              </select>
 
+                                         </div>
+
+                                         <div class="mb-3" hidden="true">
+                                             <label for="status" class="form-label">status</label>
+                                             <input type="text" class="form-control" id="status" name="status" value="NO ACC">
                                          </div>
 
 
@@ -323,12 +348,13 @@
                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Kode Barang Masuk</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal Masuk</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Barang</th>
-                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Jenis Barang</th>
+
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Harga Beli</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Satuan Barang</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Jumlah Masuk</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Supplier</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">User</th>
+                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
                                  </tr>
 
@@ -356,9 +382,7 @@
                                          <td class="align-middle text-center">
                                              <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["nama_barang"]; ?></span>
                                          </td>
-                                         <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["jenis_barang"]; ?></span>
-                                         </td>
+
 
                                          <td class="align-middle text-center">
                                              <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["harga_beli"]; ?></span>
@@ -367,7 +391,7 @@
                                              <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["satuan_barang"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["jumlah_masuk"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["jumlah_masuk"]; ?> <?= $barangMasuk["satuan_barang"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
                                              <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["nama_suplier"]; ?></span>
@@ -375,105 +399,25 @@
                                          <td class="align-middle text-center">
                                              <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["username"]; ?></span>
                                          </td>
+                                         <td class="align-middle text-center">
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["status_barang_masuk"]; ?></span>
+                                         </td>
 
                                          <td class="align-middle">
-                                             <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
 
-                                                 <button type="button" class="btn ">
+                                             <a href="../tbhstok.php?tmbbrg=<?= $barangMasuk["kode_barang_masuk"]; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="tambah stok">
+
+                                                 <button type="button" class="btn " name="tambahstok" id="svg">
                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#157347" class="bi bi-check-square-fill" viewBox="0 0 16 16">
                                                          <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"></path>
                                                      </svg>
 
                                                  </button>
 
-                                                 <a data-bs-toggle="modal" data-bs-target="#ubahbrg<?= $barangMasuk["kode_barang_masuk"]; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="ubahbrg">
-                                                     <button type=" button" class="btn ">
-                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF8C00" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
-                                                         </svg>
 
-                                                     </button>
-                                                 </a>
-                                                 <!-- Modal -->
-                                                 <div class="modal fade" id="ubahbrg<?= $barangMasuk['kode_barang_masuk']; ?>" tabindex="-1" aria-labelledby="ubahbrg" aria-hidden="true">
-                                                     <div class="modal-dialog">
-                                                         <div class="modal-content">
-                                                             <div class="modal-header">
-                                                                 <h5 class="modal-title" id="exampleModalLabel">Ubah Data barang masuk</h5>
-                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" name="ubahbrg"></button>
-                                                             </div>
-                                                             <div class="modal-body">
-                                                                 <!-- form -->
-                                                                 <form action="" method="POST">
-
-                                                                     <input type="hidden" name="kdbrgmsk" value="<?= $barangMasuk['kode_barang_masuk']; ?>">
-                                                                     <div class="mb-3">
-                                                                         <label for="nama_supplier" class="form-label">Nama Barang Masuk</label>
-                                                                         <input type="text" class="form-control" id="nmbrg" placeholder="ex : paku beton" name="nmbrg" value="<?= $barangMasuk['nama_barang']; ?>">
-                                                                     </div>
-                                                                     <div class="mb-3">
-                                                                         <label for="notelp_supplier" class="form-label">Jenis Barang Masuk</label>
-                                                                         <input type="text" class="form-control" id="jnsbrg" placeholder="ex : paku" name="jnsbrg" value="<?= $barangMasuk['jenis_barang']; ?>">
-                                                                     </div>
-                                                                     <div class="mb-3">
-                                                                         <label for="hrgbli" class="form-label">Harga Beli</label>
-                                                                         <input type="number" class="form-control" id="hrgbli" placeholder="ex: Rp.50000" name="hrgbli" value="<?= $barangMasuk['harga_beli']; ?>">
-                                                                     </div>
-                                                                     <div class="mb-3">
-                                                                         <label for="stnbrg" class="form-label">Satuan Barang</label>
-                                                                         <input type="text" class="form-control" id="stnbrg" placeholder="ex : m,kg,l" name="stnbrg" value="<?= $barangMasuk['satuan_barang']; ?>">
-                                                                     </div>
-
-                                                                     <div class="mb-3">
-                                                                         <label for="jmlmsk" class="form-label">Jumlah Masuk</label>
-                                                                         <input type="number" class="form-control" id="jmlmsk" placeholder="ex : 10" name="jmlmsk" value="<?= $barangMasuk['jumlah_masuk']; ?>">
-                                                                     </div>
-
-                                                                     <div class="mb-3">
-                                                                         <label for="nmspl" class="form-label">Supplier</label>
-
-
-                                                                         <select name="nmspl" id="nmspl">
-                                                                             <?php $suplier = mysqli_query($conn, "SELECT id_suplier, nama_suplier FROM suplier"); ?>
-                                                                             <?php while ($spl = mysqli_fetch_array($suplier)) : ?>
-                                                                                 <option value="<?= $spl["id_suplier"]; ?>"><?= $spl["nama_suplier"]; ?></option>
-
-                                                                             <?php endwhile; ?>
-                                                                         </select>
-
-                                                                     </div>
-                                                                     <div class="mb-3" hidden="true">
-                                                                         <label for=" nmusr" class="form-label">User</label>
-
-
-
-                                                                         <?php $usr = $_SESSION['username']; ?>
-                                                                         <?php $user = mysqli_query($conn, "SELECT id_user, username FROM user WHERE username = '$usr'"); ?>
-                                                                         <?php $usr = mysqli_fetch_array($user); ?>
-
-                                                                         <input type="text" name="nmusr" id="nmusr" value="<?= $usr["id_user"]; ?>">
-
-
-                                                                         </select>
-
-                                                                     </div>
-
-
-
-
-                                                             </div>
-                                                             <div class="modal-footer" name="ubahbrg">
-                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                                                                 <button type="submit" class="btn btn-primary" name="ubahbrg" id="liveAlertBtn">Ubah Data</button>
-                                                             </div>
-                                                             </form>
-                                                             <!-- form -->
-                                                         </div>
-                                                     </div>
-                                                 </div>
-                                                 <!-- akhir modal -->
-                                                 <a href="../del/delmsk.php?kdbrgmsk=<?= $barangMasuk["kode_barang_masuk"]; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                
+                                               
+                                                 <a href="../del/delmsk.php?kdbrgmsk=<?= $barangMasuk["kode_barang_masuk"]; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="del barang user">
                                                      <button type="button" class="btn">
                                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
                                                              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -501,6 +445,7 @@
 
 
      <!--   Core JS Files   -->
+
      <script src="../assets/js/core/popper.min.js"></script>
      <script src="../assets/js/core/bootstrap.min.js"></script>
      <script src="../assets/js/plugins/perfect-scrollbar.min.js"></script>
@@ -602,6 +547,7 @@
      <script async defer src="https://buttons.github.io/buttons.js"></script>
      <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
      <script src="../assets/js/argon-dashboard.min.js?v=2.0.0"></script>
+
  </body>
 
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
