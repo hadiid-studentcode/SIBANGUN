@@ -385,7 +385,7 @@
 
 
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["harga_beli"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold">RP.<?= $barangMasuk["harga_beli"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
                                              <span class="text-secondary text-xs font-weight-bold"><?= $barangMasuk["satuan_barang"]; ?></span>

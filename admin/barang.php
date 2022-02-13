@@ -1,6 +1,6 @@
  <?php
     require '../function.php';
-    
+
     // cek apakah yang mengakses halaman ini sudah login
     if ($_SESSION['level'] == "") {
         header("location:../index.php");
@@ -14,8 +14,31 @@
         $data = caribarang($_POST['keyword']);
     }
 
+    // ubah data barang
+    // cek apakah tombil submit ubah sudah ditekan atau belum
 
-  
+    if (isset($_POST["ubahdata"])) {
+        // cek apakah data berhasil diubah atau tidak
+
+        if (ubahbarang($_POST) > 0) {
+            echo "
+            <script>
+            alert ('data berhasil diubah !');
+            document.location.href = 'barang.php';
+            </script>
+        ";
+        } else {
+            echo "
+            <script>
+            alert ('data gagal diubah !');
+            document.location.href = 'barang.php';
+            </script>
+        ";
+        }
+    }
+
+
+
 
     ?>
 
@@ -240,17 +263,17 @@
                                              <span class="text-secondary text-xs font-weight-bold"><?= $barang["satuan_barang"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barang["harga_beli"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold">RP.<?= $barang["harga_beli"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barang["harga_jual"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold">RP.<?= $barang["harga_jual"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
                                              <span class="text-secondary text-xs font-weight-bold"><?= $barang["stok_barang"]; ?></span>
                                          </td>
 
                                          <td class="align-middle">
-                                             <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                             <a data-bs-toggle="modal" data-bs-target="#ubahdata<?= $barang["kode_barang"]; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit barang">
                                                  <button type="button" class="btn ">
                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF8C00" class="bi bi-pencil-square" viewBox="0 0 16 16">
                                                          <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
@@ -259,6 +282,57 @@
 
                                                  </button>
                                              </a>
+                                             <!-- Modal -->
+                                             <div class="modal fade" id="ubahdata<?= $barang["kode_barang"]; ?>" tabindex="-1" aria-labelledby="ubahdata" aria-hidden="true">
+                                                 <div class="modal-dialog">
+                                                     <div class="modal-content">
+                                                         <div class="modal-header">
+                                                             <h5 class="modal-title" id="exampleModalLabel">Ubah Data Barang</h5>
+                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" name="ubahdata"></button>
+                                                         </div>
+                                                         <div class="modal-body">
+                                                             <!-- form -->
+                                                             <form action="" method="POST">
+
+                                                                 <input type="hidden" name="kb" value="<?= $barang["kode_barang"]; ?>">
+                                                                 <div class="mb-3">
+                                                                     <label for="nb" class="form-label">Nama Barang</label>
+                                                                     <input type="text" class="form-control" id="nb" placeholder="masukkan nama barang" name="nb" value="<?= $barang["nama_barang"]; ?>" disabled>
+                                                                 </div>
+                                                                 <div class="mb-3">
+                                                                     <label for="jb" class="form-label">Jenis Barang</label>
+                                                                     <input type="text" class="form-control" id="jb" placeholder="ex : paku" name="jb" value="<?= $barang["keterangan"]; ?>" disabled>
+                                                                 </div>
+                                                                 <div class="mb-3">
+                                                                     <label for="stn" class="form-label">Satuan</label>
+                                                                     <input type="text" class="form-control" id="stn" placeholder="KG,TON,M dll" name="stn" value="<?= $barang["satuan_barang"]; ?>" disabled>
+                                                                 </div>
+                                                                 <div class="mb-3">
+                                                                     <label for="hb" class="form-label">Harga Barang</label>
+                                                                     <input type="number" class="form-control" id="hb" placeholder="RP.0000000" name="hb" value="<?= $barang["harga_beli"]; ?>" disabled>
+                                                                 </div>
+                                                                 <div class="mb-3">
+                                                                     <label for="hj" class="form-label">Harga Jual</label>
+                                                                     <input type="number" class="form-control" id="hj" placeholder="RP.0000000" name="hj" value="<?= $barang["harga_jual"]; ?>">
+                                                                 </div>
+                                                                 <div class="mb-3">
+                                                                     <label for="sb" class="form-label">Stok Barang</label>
+                                                                     <input type="number" class="form-control" id="sb" placeholder="000" name="sb" value="<?= $barang["stok_barang"]; ?>">
+                                                                 </div>
+
+
+
+                                                         </div>
+                                                         <div class="modal-footer" name="tambahdata">
+                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                                             <button type="submit" class="btn btn-primary" name="ubahdata" id="liveAlertBtn">Ubah Data</button>
+                                                         </div>
+                                                         </form>
+                                                         <!-- form -->
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                             <!-- akhir modal -->
                                              <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                                  <button type="button" class="btn">
                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">

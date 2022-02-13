@@ -168,6 +168,7 @@ function ubah($data)
     return mysqli_affected_rows($conn);
 }
 
+// ubah data barang masuk
 function ubahbrg($data)
 {
     global $conn;
@@ -196,6 +197,29 @@ function ubahbrg($data)
                      id_user = '$user'
                 WHERE kode_barang_masuk = $kdbarangmasuk
              ";
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
+}
+
+
+// ubah data barang
+function ubahbarang($data){
+    global $conn;
+    $kodebarang = ($data['kb']);
+    $hargajual = ($data["hj"]);
+    $stokbarang = ($data["sb"]);
+
+
+    // query ubah data barang
+    $query = "UPDATE barang  SET
+                    harga_jual = '$hargajual',
+                     stok_barang = '$stokbarang'
+                WHERE kode_barang = $kodebarang
+             ";
+
+
+
     mysqli_query($conn, $query);
 
     return mysqli_affected_rows($conn);
@@ -304,7 +328,6 @@ function tambahstokbarang($data)
                 status_barang_masuk = 'ACC'
                 WHERE kode_barang_masuk = '$data'
              ";
-
     } else {
 
 
