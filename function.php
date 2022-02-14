@@ -259,11 +259,11 @@ function caribarang($keyword)
     global $conn;
 
 
-    $query = "SELECT * FROM barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk
+    $query = "SELECT * FROM barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk JOIN suplier ON barang_masuk.id_suplier = suplier.id_suplier
                 WHERE
                 kode_barang LIKE '%$keyword%' OR
                  nama_barang LIKE '%$keyword%' OR
-                  jenis_barang LIKE '%$keyword%' OR
+                  keterangan LIKE '%$keyword%' OR
                    satuan_barang LIKE '%$keyword%' OR
                     harga_beli LIKE '%$keyword%' OR
                     harga_jual LIKE '%$keyword%' OR
@@ -289,7 +289,7 @@ function caribarangmsk($keyword)
             kode_barang_masuk LIKE '%$keyword%' OR
                  tanggal_masuk LIKE '%$keyword%' OR
                   nama_barang LIKE '%$keyword%' OR
-                   jenis_barang LIKE '%$keyword%' OR
+                   keterangan LIKE '%$keyword%' OR
                     harga_beli LIKE '%$keyword%' OR
                     satuan_barang LIKE '%$keyword%' OR
                      jumlah_masuk LIKE '%$keyword%' OR

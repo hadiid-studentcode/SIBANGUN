@@ -1,12 +1,26 @@
  <?php
     require "../function.php";
+    
 
     // cek apakah yang mengakses halaman ini sudah login
     if ($_SESSION['level'] == "") {
         header("location:../index.php");
     }
 
-    $supplier = mysqli_query($conn, "SELECT * FROM suplier");
+    // pagination
+    // konfigurasi
+    $jumlahDataPerHalaman = 5;
+    $jumlahData = count(query("SELECT * FROM suplier"));
+    $jumlahhalaman = ceil($jumlahData / $jumlahDataPerHalaman);
+    $halamanAktif = (isset($_GET["page"])) ? $_GET["page"] : 1;
+    $awalData = ($jumlahDataPerHalaman * $halamanAktif) - $jumlahDataPerHalaman;
+
+
+
+
+
+
+    $supplier = mysqli_query($conn, "SELECT * FROM suplier LIMIT $awalData,$jumlahDataPerHalaman");
 
     // tombol cari ditekan
 
@@ -63,6 +77,8 @@
         ";
         }
     }
+
+
 
 
     ?>
@@ -240,6 +256,7 @@
                      <h6>Data Supplier</h6>
 
 
+
                      <div data-bs-toggle="modal" data-bs-target="#tambahdata" style="float: right;">
                          <button class="btn bg-gradient-primary mb-0"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
                                  <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
@@ -248,6 +265,35 @@
 
 
                      </div>
+                     <!-- navigasi -->
+                     <nav aria-label="Page navigation example">
+                         <ul class="pagination">
+                             <li class="page-item">
+                                 <?php if ($halamanAktif > 1) : ?>
+                                     <a class="page-link" href="?page=<?= $halamanAktif - 1; ?>" aria-label="Previous">
+
+                                         <span aria-hidden="true">&laquo;</span>
+                                     </a>
+                                 <?php endif; ?>
+                             </li>
+                             <?php for ($i = 1; $i <= $jumlahhalaman; $i++) : ?>
+                                 <?php if ($i == $halamanAktif) : ?>
+                                     <li class="page-item"><a class="page-link" href="?page=<?= $i; ?>" style="font-weight: bold; color: red;"><?= $i; ?></a></li>
+                                 <?php else : ?>
+                                     <li class="page-item"><a class="page-link" href="?page=<?= $i; ?>"><?= $i; ?></a></li>
+                                 <?php endif; ?>
+                             <?php endfor; ?>
+                             <li class="page-item">
+                                 <?php if ($halamanAktif < $jumlahhalaman) : ?>
+                                     <a class="page-link" href="?page=<?= $halamanAktif + 1; ?>" aria-label="Next">
+                                         <span aria-hidden="true">&raquo;</span>
+                                     </a>
+                                 <?php endif; ?>
+                             </li>
+                         </ul>
+                     </nav>
+                     <!-- end -->
+
                      <!-- modal -->
 
 
