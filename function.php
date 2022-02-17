@@ -8,6 +8,8 @@ session_start();
 // koneksi ke database
 $conn = mysqli_connect("localhost", "root", "", "sibangun");
 
+
+
 function query($query)
 {
     global $conn;
@@ -294,7 +296,8 @@ function caribarangmsk($keyword)
                     satuan_barang LIKE '%$keyword%' OR
                      jumlah_masuk LIKE '%$keyword%' OR
                       nama_suplier LIKE '%$keyword%' OR
-                       username LIKE '%$keyword%'
+                       username LIKE '%$keyword%' OR
+                        status_barang_masuk LIKE '%$keyword%'
 
 
 
@@ -304,6 +307,8 @@ function caribarangmsk($keyword)
 
     return mysqli_query($conn, $query);
 }
+
+
 
 function tambahstokbarang($data)
 {
@@ -380,3 +385,4 @@ function tambahstokbarang($data)
 
     return mysqli_affected_rows($conn);
 }
+

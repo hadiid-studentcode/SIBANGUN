@@ -6,18 +6,7 @@
         header("location:../index.php");
     }
 
-    // $data = mysqli_query($conn, "SELECT * FROM user JOIN pegawai_gudang ON user.id_user = pegawai_gudang.id_user JOIN pemilik ON pemilik.id_user = user.id_user");
-
-    $data = mysqli_query($conn, "SELECT * FROM user JOIN pegawai_gudang ON user.id_user = pegawai_gudang.id_user");
-
-    $data2 = mysqli_query($conn, " SELECT * FROM user JOIN pemilik  ON pemilik.id_user = user.id_user");
-
-
-
-
-
-
-
+    $data = mysqli_query($conn, "SELECT * FROM transaksi JOIN user ON transaksi.id_user = user.id_user");
 
 
 
@@ -139,22 +128,14 @@
                  <nav aria-label="breadcrumb">
                      <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                          <li class="breadcrumb-item text-sm"><a class="opacity-5 text-white" href="dashboard.php">Dashboard</a></li>
-                         <li class="breadcrumb-item text-sm text-white active" aria-current="page">User management</li>
+                         <li class="breadcrumb-item text-sm text-white active" aria-current="page">Transaksi Penjualan</li>
+                         <li class="breadcrumb-item text-sm text-white active" aria-current="page">Lakukan Transaksi </li>
                      </ol>
-                     <h6 class="font-weight-bolder text-white mb-0">KELOLA USER</h6>
+                     <h6 class="font-weight-bolder text-white mb-0">Lakukan Transaksi Penjualan</h6>
                  </nav>
                  <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                      <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                         <!-- form pencarian -->
-                         <form action="" method="POST">
-                             <div class="input-group">
-                                 <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                                 <button type="submit" name="cari" id="tombol-cari-user" hidden='true'>Cari</button>
-                                 <input type="text" class="form-control" autofocus autocomplete="off" id="keyword" placeholder="Cari Supplier.." name="keyword">
 
-                             </div>
-                         </form>
-                         <!-- akhir form pencarian -->
                      </div>
                      <ul class="navbar-nav  justify-content-end">
                          <li class="nav-item d-flex align-items-center">
@@ -190,12 +171,29 @@
          <div class="col-12 container">
              <div class="card mb-4">
                  <div class="card-header pb-0">
-                     <h6>Data User</h6>
+                     <h6>Keranjang Belanjaan</h6>
                      <div class="col-12 text-end">
-                         <a class="btn bg-gradient-primary mb-0" href="#"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
-                                 <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-                                 <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z" />
-                             </svg>&nbsp;&nbsp;Tambah User</a>
+                         <a class="btn bg-gradient-primary mb-0" data-bs-toggle="modal" data-bs-target="#pilihbarang"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                 <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                             </svg>&nbsp;&nbsp;Pilih Barang</a>
+                         <!-- Modal pilih barang -->
+                         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                             <div class="modal-dialog">
+                                 <div class="modal-content">
+                                     <div class="modal-header">
+                                         <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                     </div>
+                                     <div class="modal-body">
+                                         ...
+                                     </div>
+                                     <div class="modal-footer">
+                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                         <button type="button" class="btn btn-primary">Understood</button>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
                      </div>
                  </div>
                  <div class="card-body px-0 pt-0 pb-2">
@@ -204,15 +202,17 @@
                              <thead>
                                  <tr>
                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
-                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nama</th>
-                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Username</th>
-                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No.telp</th>
-                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Level</th>
+                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nama Barang</th>
+                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Harga Satuan</th>
+                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Jumlah beli</th>
+                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Total</th>
                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+
                                  </tr>
+
                              </thead>
                              <?php $i = 1; ?>
-                             <?php while ($pemilik = mysqli_fetch_array($data2)) : ?>
+                             <?php while ($transaksi = mysqli_fetch_array($data)) : ?>
                                  <tbody>
                                      <tr scope="row">
                                          <td>
@@ -225,32 +225,28 @@
                                              </div>
                                          </td>
                                          <td>
-                                             <p class="text-xs font-weight-bold mb-0"><?= $pemilik["nama_pemilik"]; ?></p>
+                                             <p class="text-xs font-weight-bold mb-0"><?= $transaksi["kode_transaksi"]; ?></p>
 
                                          </td>
                                          <td class="align-middle text-center text-sm">
-                                             <span class="badge badge-sm bg-gradient-success"><?= $pemilik["username"]; ?></span>
+                                             <span class="badge badge-sm bg-gradient-success"><?= $transaksi["tanggal_transaksi"]; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $pemilik["no_telp_pemilik"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["nama_pembeli"]; ?></span>
+                                         </td>
+                                         <td class="align-middle text-center">
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["sub_total"]; ?></span>
+                                         </td>
+                                         <td class="align-middle text-center">
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["jenis_pembayaran"]; ?></span>
+                                         </td>
 
-                                         </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $pemilik["level"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["Keterangan"]; ?></span>
                                          </td>
+
 
                                          <td class="align-middle">
-                                             <!-- ubah password -->
-                                             <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                 <button type="button" class="btn ">
-                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
-                                                         <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-                                                     </svg>
-
-                                                 </button>
-                                             </a>
-                                             <!-- akhir -->
-                                             <!-- ubah user -->
                                              <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                                  <button type="button" class="btn ">
                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF8C00" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -259,71 +255,11 @@
                                                      </svg>
 
                                                  </button>
-                                             </a>
-                                             <!-- akhir -->
-                                             <!-- hapus user -->
-                                             <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                 <button type="button" class="btn">
-                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
-                                                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                                         <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                                     </svg>
-
-                                                 </button>
-                                             </a>
-                                             <!-- akhir -->
-                                         </td>
-                                     </tr>
-
-                                     <?php $i++; ?>
-                                 <?php endwhile; ?>
-                                 </tbody>
-
-
-                                 <?php while ($pegawai = mysqli_fetch_array($data)) : ?>
-
-                                     <tbody>
-                                         <tr scope="row">
-                                             <td>
-                                                 <div class="d-flex px-2 py-1">
-
-                                                     <div class="d-flex flex-column justify-content-center">
-                                                         <h6 class="mb-0 text-sm"><?= $i; ?></h6>
-
-                                                     </div>
-                                                 </div>
-                                             </td>
-                                             <td>
-                                                 <p class="text-xs font-weight-bold mb-0"><?= $pegawai["nama_pegawai"]; ?></p>
-
-                                             </td>
-                                             <td class="align-middle text-center text-sm">
-                                                 <span class="badge badge-sm bg-gradient-success"><?= $pegawai["username"]; ?></span>
-                                             </td>
-                                             <td class="align-middle text-center">
-                                                 <span class="text-secondary text-xs font-weight-bold"><?= $pegawai["no_telp_pegawai"]; ?></span>
-
-                                             </td>
-                                             <td class="align-middle text-center">
-                                                 <span class="text-secondary text-xs font-weight-bold"><?= $pegawai["level"]; ?></span>
-                                             </td>
-
-                                             <td class="align-middle">
-                                                 <!-- ubah password -->
                                                  <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                                      <button type="button" class="btn ">
-                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
-                                                             <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-                                                         </svg>
-
-                                                     </button>
-                                                 </a>
-                                                 <!-- akhir -->
-                                                 <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                     <button type="button" class="btn ">
-                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF8C00" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                                             <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF8C00" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
                                                          </svg>
 
                                                      </button>
@@ -337,20 +273,69 @@
 
                                                      </button>
                                                  </a>
-                                             </td>
-                                         </tr>
+                                         </td>
+                                     </tr>
 
-                                         <?php $i++; ?>
-                                     <?php endwhile; ?>
-                                     </tbody>
+
+                                     <?php $i++; ?>
+                                 <?php endwhile; ?>
+                                 </tbody>
                          </table>
                      </div>
                  </div>
              </div>
          </div>
+
+         <!-- form pembeli -->
+         <div class="col-9 container">
+             <div class="card mb-4">
+                 <div class="card-header pb-0">
+                     <h6>From Pembelian</h6>
+                     <div class="col-12 text-end">
+                         <a class="btn bg-gradient-success mb-0" href="transaksipenjualan.php"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-save2" viewBox="0 0 16 16">
+                                 <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v4.5h2a.5.5 0 0 1 .354.854l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5A.5.5 0 0 1 5.5 6.5h2V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
+                             </svg>&nbsp;&nbsp;Simpan</a>
+                     </div>
+                 </div>
+                 <div class="card-body px-0 pt-0 pb-2">
+                     <div class="table-responsive p-0">
+                         <!-- table -->
+
+                         <form action="" method="POST" class="container">
+                             <div class="mb-3">
+                                 <label for="nmpembeli" class="form-label">Nama Pembeli</label>
+                                 <input type="text" class="form-control" id="nmpembeli" name="nmpembeli" placeholder="Nama Pembeli">
+                             </div>
+
+                             <div class="mb-3">
+                                 <label for="ungdibyr" class="form-label">Uang Dibayar</label>
+
+                                 <div class="input-group mb-3">
+                                     <span class="input-group-text" id="ungdibyr">RP</span>
+                                     <input type="number" class="form-control" placeholder="Uang Dibayar" aria-label="ungdibyr" aria-describedby="ungdibyr" name="ungdibyr" id="ungdibyr">
+                                 </div>
+                             </div>
+
+                             <div class="mb-3">
+                                 <label for="ungkembalian" class="form-label">Uang Kembalian</label>
+
+                                 <div class="input-group mb-3">
+                                     <span class="input-group-text" id="ungkembalian">RP</span>
+                                     <input type="number" class="form-control" placeholder="Uang Kembalian" aria-label="ungkembalian" aria-describedby="ungkembalian" name="ungkembalian" id="ungkembalian" disabled>
+                                 </div>
+                             </div>
+                         </form>
+
+                         <!-- akhir -->
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <!-- akhir form pembeli -->
      </main>
 
-
+     <!-- scirpt dari saya js -->
+     <script src="../dist/js/script.js"></script>
 
 
 

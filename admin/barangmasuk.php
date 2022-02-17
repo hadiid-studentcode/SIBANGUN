@@ -36,7 +36,7 @@
         } else {
             echo "
             <script>
-            alert ('data gagal  diubah !');
+            alert ('data gagal  ditambah !');
             document.location.href = 'barangmasuk.php';
             </script>
         ";
