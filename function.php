@@ -94,9 +94,21 @@ function hapusbarangmasuk($i)
     return mysqli_affected_rows($conn);
 }
 
-function hapusbarang($d){
+function hapusbarang($d)
+{
     global $conn;
     mysqli_query($conn, "DELETE FROM barang WHERE kode_barang = $d");
+
+
+
+    return mysqli_affected_rows($conn);
+}
+
+function hapusbarangkeluar($bk)
+{
+
+    global $conn;
+    mysqli_query($conn, "DELETE FROM barang_keluar WHERE id_barangkeluar  = $bk");
 
 
 
@@ -214,7 +226,8 @@ function ubahbrg($data)
 
 
 // ubah data barang
-function ubahbarang($data){
+function ubahbarang($data)
+{
     global $conn;
     $kodebarang = ($data['kb']);
     $hargajual = ($data["hj"]);
@@ -381,8 +394,32 @@ function tambahstokbarang($data)
     mysqli_query($conn, $query);
     mysqli_query($conn, $querystat);
 
-   
+
 
     return mysqli_affected_rows($conn);
 }
 
+function pilihbarang($data)
+{
+    global $conn;
+    $barang = ($data['pilihbrg']);
+    $jumlah = ($data['jumlahbeli']);
+
+
+    $data = mysqli_query($conn, "SELECT harga_jual from barang WHERE kode_barang = $barang");
+    $hargabrg = mysqli_fetch_array($data);
+
+    $hargaBarang = $hargabrg['harga_jual'];
+    // mencari total harga dari jumlah yang dibeli
+    // total = harga barang * jumlah beli
+    $total = $hargaBarang * $jumlah;
+
+    $query = "INSERT INTO barang_keluar VALUE ('','$barang','$jumlah','$total') ";
+
+    mysqli_query($conn, $query);
+
+
+
+
+    return mysqli_affected_rows($conn);
+}

@@ -6,7 +6,33 @@
         header("location:../index.php");
     }
 
-    $data = mysqli_query($conn, "SELECT * FROM transaksi JOIN user ON transaksi.id_user = user.id_user");
+    $data = mysqli_query($conn, "SELECT * FROM barang_keluar JOIN barang ON barang_keluar.kode_barang = barang.kode_barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk");
+
+
+
+
+
+
+    if (isset($_POST['pilih'])) {
+
+        if (pilihbarang($_POST) > 0) {
+            echo "
+            <script>
+            alert ('data berhasil ditambahkan !');
+            document.location.href = 'transaksipenjualan.php';
+            </script>
+        ";
+        } else {
+            echo "
+            <script>
+            alert ('data gagal ditambahkan !');
+            document.location.href = 'transaksipenjualan.php';
+            </script>
+        ";
+        }
+    }
+
+
 
 
 
@@ -177,21 +203,43 @@
                                  <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                              </svg>&nbsp;&nbsp;Pilih Barang</a>
                          <!-- Modal pilih barang -->
-                         <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                         <div class="modal fade" id="pilihbarang" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                              <div class="modal-dialog">
-                                 <div class="modal-content">
-                                     <div class="modal-header">
-                                         <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                 <form action="" method="POST">
+                                     <div class="modal-content">
+                                         <div class="modal-header">
+                                             <h5 class="modal-title" id="staticBackdropLabel">Pilih Barang</h5>
+                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                         </div>
+                                         <div class="modal-body">
+                                             <div class="form-floating">
+                                                 <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="pilihbrg">
+                                                     <option selected>Pilih Barang Bangunan</option>
+                                                     <?php $barang = mysqli_query($conn, "SELECT * FROM barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk JOIN suplier ON barang_masuk.id_suplier = suplier.id_suplier"); ?>
+
+                                                     <?php while ($brg = mysqli_fetch_array($barang)) : ?>
+
+                                                         <option value=<?= $brg["kode_barang"]; ?>><?= $brg["nama_barang"]; ?> ( <?= $brg["satuan_barang"]; ?> ) ( <?= $brg["harga_jual"]; ?> ) </option>
+                                                     <?php endwhile; ?>
+
+                                                 </select>
+
+                                                 <label for="floatingSelect">Pilih Barang</label>
+                                             </div>
+                                             <br>
+                                             <div class="form-floating">
+                                                 <input type="number" class="form-control" id="jumlahbeli" aria-describedby="emailHelp" name="jumlahbeli">
+
+                                                 <label for="floatingSelect">Jumlah Beli</label>
+                                             </div>
+
+                                         </div>
+                                         <div class="modal-footer">
+                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                                             <button type="submit" class="btn btn-primary" name="pilih">Pilih Barang</button>
+                                         </div>
                                      </div>
-                                     <div class="modal-body">
-                                         ...
-                                     </div>
-                                     <div class="modal-footer">
-                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                         <button type="button" class="btn btn-primary">Understood</button>
-                                     </div>
-                                 </div>
+                                 </form>
                              </div>
                          </div>
                      </div>
@@ -212,7 +260,7 @@
 
                              </thead>
                              <?php $i = 1; ?>
-                             <?php while ($transaksi = mysqli_fetch_array($data)) : ?>
+                             <?php while ($barangkeluar = mysqli_fetch_assoc($data)) :  ?>
                                  <tbody>
                                      <tr scope="row">
                                          <td>
@@ -225,60 +273,50 @@
                                              </div>
                                          </td>
                                          <td>
-                                             <p class="text-xs font-weight-bold mb-0"><?= $transaksi["kode_transaksi"]; ?></p>
+                                             <p class="text-xs font-weight-bold mb-0"><?= $barangkeluar['nama_barang']; ?></p>
 
                                          </td>
                                          <td class="align-middle text-center text-sm">
-                                             <span class="badge badge-sm bg-gradient-success"><?= $transaksi["tanggal_transaksi"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold">RP.<?= $barangkeluar['harga_jual']; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["nama_pembeli"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangkeluar['jumlah_beli']; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["sub_total"]; ?></span>
-                                         </td>
-                                         <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["jenis_pembayaran"]; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold">RP.<?= $barangkeluar['total']; ?></span>
                                          </td>
 
-                                         <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["Keterangan"]; ?></span>
-                                         </td>
 
 
                                          <td class="align-middle">
-                                             <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                 <button type="button" class="btn ">
-                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF8C00" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                                                         <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                                         <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+
+
+                                             <a href="../del/delkrjblnj.php?delbelanja=<?= $barangkeluar['id_barangkeluar']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                 <button type="button" class="btn">
+                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                         <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
                                                      </svg>
 
                                                  </button>
-                                                 <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                     <button type="button" class="btn ">
-                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF8C00" class="bi bi-info-circle" viewBox="0 0 16 16">
-                                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                                             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
-                                                         </svg>
-
-                                                     </button>
-                                                 </a>
-                                                 <a href="#" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                     <button type="button" class="btn">
-                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
-                                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                                             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                                         </svg>
-
-                                                     </button>
-                                                 </a>
+                                             </a>
                                          </td>
                                      </tr>
-
-
-                                     <?php $i++; ?>
+                                     <?php $i++ ?>
                                  <?php endwhile; ?>
+
+                                 <?php $sql = mysqli_query($conn, "SELECT sum(total) as subtotal from barang_keluar;");
+                                    $subtotal = mysqli_fetch_array($sql); ?>
+                                 <tr>
+                                     <td colspan="4" class="align-middle text-center">
+                                         <span class="text-secondary text-xs font-weight-bold">SUB TOTAL</span>
+                                     </td>
+                                     <td colspan="" class="align-middle text-start"> <span class="text-secondary text-xs font-weight-bold">RP.<?= $subtotal['subtotal']; ?></span></td>
+                                 </tr>
+
+
+
+
                                  </tbody>
                          </table>
                      </div>
@@ -324,6 +362,16 @@
                                      <input type="number" class="form-control" placeholder="Uang Kembalian" aria-label="ungkembalian" aria-describedby="ungkembalian" name="ungkembalian" id="ungkembalian" disabled>
                                  </div>
                              </div>
+                             <div class="mb-3">
+                                 <select class="form-select" aria-label="Default select example">
+                                     <option selected>Jenis Pembayaran</option>
+                                     <option value="Tunai">Tunai</option>
+                                     <option value="Transfer">Transfer</option>
+                                     <option value="Hutang">Hutang</option>
+                                 </select>
+                             </div>
+
+
                          </form>
 
                          <!-- akhir -->
