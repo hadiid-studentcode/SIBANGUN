@@ -115,6 +115,15 @@ function hapusbarangkeluar($bk)
     return mysqli_affected_rows($conn);
 }
 
+function hapustransaksi($kotrans)
+{
+    global $conn;
+    mysqli_query($conn, "DELETE FROM transaksi WHERE id_transaksi  = $kotrans");
+
+
+    return mysqli_affected_rows($conn);
+}
+
 function tambah($data)
 {
 
@@ -407,25 +416,25 @@ function pilihbarang($data)
     $jumlahBarang = ($data['jumlahbrg']);
 
 
-    
-   
-
-   
-    
-
-        $data = mysqli_query($conn, "SELECT harga_jual from barang WHERE kode_barang = $pilihBarang");
-        $hargabrg = mysqli_fetch_array($data);
-
-        $hargaBarang = $hargabrg['harga_jual'];
-        // mencari total harga dari jumlah yang dibeli
-        // total = harga barang * jumlah beli
-
-   
 
 
-      
 
-        //     $total = $hargaBarang * $cookieJumlah;
+
+
+
+    $data = mysqli_query($conn, "SELECT harga_jual from barang WHERE kode_barang = $pilihBarang");
+    $hargabrg = mysqli_fetch_array($data);
+
+    $hargaBarang = $hargabrg['harga_jual'];
+    // mencari total harga dari jumlah yang dibeli
+    // total = harga barang * jumlah beli
+
+
+
+
+
+
+    //     $total = $hargaBarang * $cookieJumlah;
 
 
     $data = mysqli_query($conn, "SELECT harga_jual from barang WHERE kode_barang = $pilihBarang");
@@ -446,7 +455,8 @@ function pilihbarang($data)
     return mysqli_affected_rows($conn);
 }
 
-function formbeli ($data){
+function formbeli($data)
+{
     global $conn;
 
     $namaPembeli = ($data['nmpembeli']);
@@ -464,7 +474,7 @@ function formbeli ($data){
     // uang kembalian = uang dibayar - sub total
     $uangkembalian = $uangDibayar - $subTotal;
 
-   
+
 
 
 
@@ -491,7 +501,4 @@ function formbeli ($data){
 
 
     return mysqli_affected_rows($conn);
-   
-   
-
 }
