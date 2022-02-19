@@ -6,9 +6,9 @@
         header("location:../index.php");
     }
 
-    $data = mysqli_query($conn, "SELECT * FROM barang_keluar JOIN barang ON barang_keluar.kode_barang = barang.kode_barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk");
+    $data = mysqli_query($conn, "SELECT * FROM penjualan JOIN barang ON penjualan.kode_barang = barang.kode_barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk");
 
-    
+
 
 
 
@@ -16,12 +16,8 @@
 
 
     if (isset($_POST['pilih'])) {
-     
-       
-      
-       
-       
-        
+
+
 
         if (pilihbarang($_POST) > 0) {
             echo "
@@ -231,7 +227,7 @@
                              </svg>&nbsp;&nbsp;Pilih Barang</a>
                          <!-- Modal pilih barang -->
                          <div class="modal fade" id="pilihbarang" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                             <div class="modal-dialog">
+                             <div class="modal-dialog modal-lg">
                                  <form action="" method="POST">
                                      <div class="modal-content">
                                          <div class="modal-header">
@@ -239,27 +235,26 @@
                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                          </div>
                                          <div class="modal-body">
-                                             <div class="form-floating">
-                                                 <select class="form-select" id="floatingSelect" aria-label="Floating label select example" name="pilihbrg">
-                                                     <option selected>Pilih Barang Bangunan</option>
-                                                     <?php $barang = mysqli_query($conn, "SELECT * FROM barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk JOIN suplier ON barang_masuk.id_suplier = suplier.id_suplier"); ?>
+                                             <div class="input-group mb-3">
+                                                 <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="pilihbrg">
+                                                     <option selected>Pilih Barang</option>
 
-                                                     <?php while ($brg = mysqli_fetch_array($barang)) : ?>
-
-                                                         <option value=<?= $brg["kode_barang"]; ?>><?= $brg["nama_barang"]; ?> ( <?= $brg["satuan_barang"]; ?> ) ( <?= $brg["harga_jual"]; ?> ) </option>
-                                                         
+                                                     <?php $data1 = mysqli_query($conn, "SELECT * FROM barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk JOIN suplier ON barang_masuk.id_suplier = suplier.id_suplier");
+                                                        ?>
+                                                     <?php $i = 0; ?>
+                                                     <?php while ($pilihbarang = mysqli_fetch_assoc($data1)) : ?>
+                                                         <option value="<?= $pilihbarang['kode_barang']; ?>"><?= $pilihbarang['nama_barang']; ?> [RP. <?= $pilihbarang['harga_jual']; ?>]</option>
+                                                         <?php $i++ ?>
                                                      <?php endwhile; ?>
 
                                                  </select>
-
-                                                 <label for="floatingSelect">Pilih Barang</label>
                                              </div>
-                                             <br>
-                                             <div class="form-floating">
-                                                 <input type="number" class="form-control" id="jumlahbeli" aria-describedby="emailHelp" name="jumlahbeli">
 
-                                                 <label for="floatingSelect">Jumlah Beli</label>
+                                             <div class="input-group mb-3">
+                                                 <span class="input-group-text" id="inputGroup-sizing-default">Jumlah Barang</span>
+                                                 <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="jumlahbrg">
                                              </div>
+
 
                                          </div>
                                          <div class="modal-footer">
@@ -287,12 +282,12 @@
                                  </tr>
 
                              </thead>
-                            
+
 
                              <?php $i = 1; ?>
-                             
 
-                             <?php while ($barangkeluar = mysqli_fetch_assoc($data)) :  ?>
+
+                             <?php while ($penjualan = mysqli_fetch_assoc($data)) :  ?>
 
 
                                  <tbody>
@@ -309,19 +304,19 @@
                                          <td>
 
 
-                                             <p class="text-xs font-weight-bold mb-0"><?= $barangkeluar['nama_barang']; ?></p>
-                                           
+                                             <p class="text-xs font-weight-bold mb-0"><?= $penjualan['nama_barang']; ?></p>
+
 
 
                                          </td>
                                          <td class="align-middle text-center text-sm">
-                                             <span class="text-secondary text-xs font-weight-bold">RP.<?= $barangkeluar['harga_jual']; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold">RP.<?= $penjualan['harga_jual']; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $barangkeluar['jumlah_beli']; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $penjualan['jumlah_beli']; ?></span>
                                          </td>
                                          <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold">RP.<?= $barangkeluar['total']; ?></span>
+                                             <span class="text-secondary text-xs font-weight-bold">RP.<?= $penjualan['total_harga']; ?></span>
                                          </td>
 
 
@@ -329,7 +324,7 @@
                                          <td class="align-middle">
 
 
-                                             <a href="../del/delkrjblnj.php?delbelanja=<?= $barangkeluar['id_barangkeluar']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                             <a href="../del/delkrjblnj.php?delbelanja=<?= $penjualan['id_penjualan']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                                  <button type="button" class="btn">
                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
                                                          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -343,7 +338,7 @@
                                      <?php $i++ ?>
                                  <?php endwhile; ?>
 
-                                 <?php $sql = mysqli_query($conn, "SELECT sum(total) as subtotal from barang_keluar;");
+                                 <?php $sql = mysqli_query($conn, "SELECT sum(total_harga) as subtotal from penjualan;");
                                     $subtotal = mysqli_fetch_array($sql); ?>
                                  <tr>
                                      <td colspan="4" class="align-middle text-center">

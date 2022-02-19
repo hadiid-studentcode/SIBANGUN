@@ -108,7 +108,7 @@ function hapusbarangkeluar($bk)
 {
 
     global $conn;
-    mysqli_query($conn, "DELETE FROM barang_keluar WHERE id_barangkeluar  = $bk");
+    mysqli_query($conn, "DELETE FROM penjualan WHERE id_penjualan  = $bk");
 
 
 
@@ -402,27 +402,41 @@ function tambahstokbarang($data)
 function pilihbarang($data)
 {
     global $conn;
-    $barang = ($data['pilihbrg']);
-    $jumlah = ($data['jumlahbeli']);
 
-  
+    $pilihBarang = ($data['pilihbrg']);
+    $jumlahBarang = ($data['jumlahbrg']);
+
 
     
-  
+   
+
+   
+    
+
+        $data = mysqli_query($conn, "SELECT harga_jual from barang WHERE kode_barang = $pilihBarang");
+        $hargabrg = mysqli_fetch_array($data);
+
+        $hargaBarang = $hargabrg['harga_jual'];
+        // mencari total harga dari jumlah yang dibeli
+        // total = harga barang * jumlah beli
+
+   
 
 
+      
+
+        //     $total = $hargaBarang * $cookieJumlah;
 
 
-
-    $data = mysqli_query($conn, "SELECT harga_jual from barang WHERE kode_barang = $barang");
+    $data = mysqli_query($conn, "SELECT harga_jual from barang WHERE kode_barang = $pilihBarang");
     $hargabrg = mysqli_fetch_array($data);
 
     $hargaBarang = $hargabrg['harga_jual'];
     // mencari total harga dari jumlah yang dibeli
     // total = harga barang * jumlah beli
-    $total = $hargaBarang * $jumlah;
+    $total = $hargaBarang * $jumlahBarang;
 
-    $query = "INSERT INTO barang_keluar VALUE ('','$barang','$jumlah','$total') ";
+    $query = "INSERT INTO penjualan (id_penjualan,kode_barang, jumlah_beli, total_harga) VALUE ('','$pilihBarang','$jumlahBarang','$total') ";
 
     mysqli_query($conn, $query);
 
@@ -441,20 +455,22 @@ function formbeli ($data){
     $keterangan = ($data['ket']);
     $user = ($data['nmusr']);
     $tgl = date('Y-m-d');
-    
-    
+    $kodetransaksi = date('Ymd');
 
     // mencari uang kembalian
-    $data = mysqli_query($conn, "SELECT sum(total) as subtotal from barang_keluar;");
+    $data = mysqli_query($conn, "SELECT sum(total_harga) as subtotal from penjualan;");
     $hasil = mysqli_fetch_array($data);
     $subTotal = $hasil['subtotal'];
     // uang kembalian = uang dibayar - sub total
     $uangkembalian = $uangDibayar - $subTotal;
 
+   
+
 
 
     $query = "INSERT INTO transaksi VALUE (
                 '',
+                '$kodetransaksi',
                 '$tgl',
                 '$namaPembeli',
                 '$subTotal',
