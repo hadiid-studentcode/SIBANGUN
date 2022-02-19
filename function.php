@@ -405,6 +405,14 @@ function pilihbarang($data)
     $barang = ($data['pilihbrg']);
     $jumlah = ($data['jumlahbeli']);
 
+  
+
+    
+  
+
+
+
+
 
     $data = mysqli_query($conn, "SELECT harga_jual from barang WHERE kode_barang = $barang");
     $hargabrg = mysqli_fetch_array($data);
@@ -422,4 +430,52 @@ function pilihbarang($data)
 
 
     return mysqli_affected_rows($conn);
+}
+
+function formbeli ($data){
+    global $conn;
+
+    $namaPembeli = ($data['nmpembeli']);
+    $uangDibayar = ($data['ungdibyr']);
+    $jenisPembayaran = ($data['jenisbayar']);
+    $keterangan = ($data['ket']);
+    $user = ($data['nmusr']);
+    $tgl = date('Y-m-d');
+    
+    
+
+    // mencari uang kembalian
+    $data = mysqli_query($conn, "SELECT sum(total) as subtotal from barang_keluar;");
+    $hasil = mysqli_fetch_array($data);
+    $subTotal = $hasil['subtotal'];
+    // uang kembalian = uang dibayar - sub total
+    $uangkembalian = $uangDibayar - $subTotal;
+
+
+
+    $query = "INSERT INTO transaksi VALUE (
+                '',
+                '$tgl',
+                '$namaPembeli',
+                '$subTotal',
+                '$uangkembalian',
+                '$jenisPembayaran',
+                '$keterangan',
+                '$user'
+    ) ";
+
+    // hapus data barang keluar
+    // $sql = "DELETE FROM barang_keluar;";
+
+    mysqli_query($conn, $query);
+
+    // mysqli_query($conn, $sql);
+
+
+
+
+    return mysqli_affected_rows($conn);
+   
+   
+
 }

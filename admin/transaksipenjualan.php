@@ -8,12 +8,20 @@
 
     $data = mysqli_query($conn, "SELECT * FROM barang_keluar JOIN barang ON barang_keluar.kode_barang = barang.kode_barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk");
 
+    
 
 
 
+    // pilih barang
 
 
     if (isset($_POST['pilih'])) {
+     
+       
+      
+       
+       
+        
 
         if (pilihbarang($_POST) > 0) {
             echo "
@@ -32,6 +40,25 @@
         }
     }
 
+    // form pembelian
+    if (isset($_POST['simpan'])) {
+
+        if (formbeli($_POST) > 0) {
+            echo "
+            <script>
+            alert ('data berhasil disimpan !');
+            document.location.href = 'transaksi.php';
+            </script>
+        ";
+        } else {
+            echo "
+            <script>
+            alert ('data gagal disimpan !');
+            document.location.href = 'transaksipenjualan.php';
+            </script>
+        ";
+        }
+    }
 
 
 
@@ -259,8 +286,14 @@
                                  </tr>
 
                              </thead>
+                            
+
                              <?php $i = 1; ?>
+                             
+
                              <?php while ($barangkeluar = mysqli_fetch_assoc($data)) :  ?>
+
+
                                  <tbody>
                                      <tr scope="row">
                                          <td>
@@ -273,7 +306,11 @@
                                              </div>
                                          </td>
                                          <td>
+
+
                                              <p class="text-xs font-weight-bold mb-0"><?= $barangkeluar['nama_barang']; ?></p>
+                                           
+
 
                                          </td>
                                          <td class="align-middle text-center text-sm">
@@ -325,60 +362,76 @@
          </div>
 
          <!-- form pembeli -->
-         <div class="col-9 container">
-             <div class="card mb-4">
-                 <div class="card-header pb-0">
-                     <h6>From Pembelian</h6>
-                     <div class="col-12 text-end">
-                         <a class="btn bg-gradient-success mb-0" href="transaksipenjualan.php"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-save2" viewBox="0 0 16 16">
-                                 <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v4.5h2a.5.5 0 0 1 .354.854l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5A.5.5 0 0 1 5.5 6.5h2V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
-                             </svg>&nbsp;&nbsp;Simpan</a>
+         <!-- table -->
+
+         <form action="" method="POST">
+
+             <div class="col-9 container">
+                 <div class="card mb-4">
+                     <div class="card-header pb-0">
+                         <h6>From Pembelian</h6>
+                         <div class="col-12 text-end">
+                             <button type="submit" class="btn bg-gradient-success mb-0" name="simpan"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-save2" viewBox="0 0 16 16">
+                                     <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v4.5h2a.5.5 0 0 1 .354.854l-2.5 2.5a.5.5 0 0 1-.708 0l-2.5-2.5A.5.5 0 0 1 5.5 6.5h2V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z" />
+                                 </svg>&nbsp;&nbsp;Simpan</button>
+                         </div>
                      </div>
-                 </div>
-                 <div class="card-body px-0 pt-0 pb-2">
-                     <div class="table-responsive p-0">
-                         <!-- table -->
+                     <div class="card-body px-0 pt-0 pb-2">
+                         <div class="table-responsive p-0">
+                             <div class="container">
 
-                         <form action="" method="POST" class="container">
-                             <div class="mb-3">
-                                 <label for="nmpembeli" class="form-label">Nama Pembeli</label>
-                                 <input type="text" class="form-control" id="nmpembeli" name="nmpembeli" placeholder="Nama Pembeli">
-                             </div>
-
-                             <div class="mb-3">
-                                 <label for="ungdibyr" class="form-label">Uang Dibayar</label>
-
-                                 <div class="input-group mb-3">
-                                     <span class="input-group-text" id="ungdibyr">RP</span>
-                                     <input type="number" class="form-control" placeholder="Uang Dibayar" aria-label="ungdibyr" aria-describedby="ungdibyr" name="ungdibyr" id="ungdibyr">
+                                 <div class="mb-3">
+                                     <label for="nmpembeli" class="form-label">Nama Pembeli</label>
+                                     <input type="text" class="form-control" id="nmpembeli" name="nmpembeli" placeholder="Nama Pembeli">
                                  </div>
-                             </div>
 
-                             <div class="mb-3">
-                                 <label for="ungkembalian" class="form-label">Uang Kembalian</label>
+                                 <div class="mb-3">
+                                     <label for="ungdibyr" class="form-label"> Uang Dibayar</label>
 
-                                 <div class="input-group mb-3">
-                                     <span class="input-group-text" id="ungkembalian">RP</span>
-                                     <input type="number" class="form-control" placeholder="Uang Kembalian" aria-label="ungkembalian" aria-describedby="ungkembalian" name="ungkembalian" id="ungkembalian" disabled>
+                                     <div class="input-group mb-3">
+                                         <span class="input-group-text" id="ungdibyr">RP</span>
+                                         <input type="number" class="form-control" placeholder="Uang Dibayar" aria-label="ungdibyr" aria-describedby="ungdibyr" name="ungdibyr" id="ungdibyr">
+                                     </div>
                                  </div>
+
+                                 <div class="mb-3">
+                                     <select class="form-select" aria-label="Default select example" name="jenisbayar">
+                                         <option selected>Jenis Pembayaran</option>
+                                         <option value="Tunai">Tunai</option>
+                                         <option value="Transfer">Transfer</option>
+                                         <option value="Hutang">Hutang</option>
+                                     </select>
+                                 </div>
+                                 <div class="mb-3">
+                                     <label for="exampleFormControlTextarea1" class="form-label">Keterangan</label>
+                                     <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="ket"></textarea>
+                                 </div>
+                                 <div class="mb-3" hidden="true">
+                                     <label for=" nmusr" class="form-label">User</label>
+
+
+
+                                     <?php $usr = $_SESSION['username']; ?>
+                                     <?php $user = mysqli_query($conn, "SELECT id_user, username FROM user WHERE username = '$usr'"); ?>
+                                     <?php $usr = mysqli_fetch_array($user); ?>
+
+                                     <input type="text" name="nmusr" id="nmusr" value="<?= $usr["id_user"]; ?>">
+
+
+                                     </select>
+
+                                 </div>
+
+
+
+
+                                 <!-- akhir -->
                              </div>
-                             <div class="mb-3">
-                                 <select class="form-select" aria-label="Default select example">
-                                     <option selected>Jenis Pembayaran</option>
-                                     <option value="Tunai">Tunai</option>
-                                     <option value="Transfer">Transfer</option>
-                                     <option value="Hutang">Hutang</option>
-                                 </select>
-                             </div>
-
-
-                         </form>
-
-                         <!-- akhir -->
+                         </div>
                      </div>
                  </div>
              </div>
-         </div>
+         </form>
          <!-- akhir form pembeli -->
      </main>
 

@@ -190,7 +190,9 @@
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pembeli</th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sub Total</th>
+                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Uang Kembalian / hutang </th>
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pembayaran</th>
+                                    
                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Keterangan</th>
                                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
                                  </tr>
@@ -210,7 +212,7 @@
                                              </div>
                                          </td>
                                          <td>
-                                             <p class="text-xs font-weight-bold mb-0"><?= $transaksi["kode_transaksi"]; ?></p>
+                                             <p class="text-xs font-weight-bold mb-0"><?= $transaksi["id_transaksi"]; ?></p>
 
                                          </td>
                                          <td class="align-middle text-center text-sm">
@@ -222,9 +224,14 @@
                                          <td class="align-middle text-center">
                                              <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["sub_total"]; ?></span>
                                          </td>
+
+                                         <td class="align-middle text-center">
+                                             <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["uang_kembalian"]; ?></span>
+                                         </td>
                                          <td class="align-middle text-center">
                                              <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["jenis_pembayaran"]; ?></span>
                                          </td>
+
 
                                          <td class="align-middle text-center">
                                              <span class="text-secondary text-xs font-weight-bold"><?= $transaksi["Keterangan"]; ?></span>
