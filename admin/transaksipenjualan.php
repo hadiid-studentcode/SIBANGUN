@@ -247,6 +247,7 @@
                                                      <?php while ($brg = mysqli_fetch_array($barang)) : ?>
 
                                                          <option value=<?= $brg["kode_barang"]; ?>><?= $brg["nama_barang"]; ?> ( <?= $brg["satuan_barang"]; ?> ) ( <?= $brg["harga_jual"]; ?> ) </option>
+                                                         
                                                      <?php endwhile; ?>
 
                                                  </select>
