@@ -445,7 +445,7 @@ function pilihbarang($data)
     // total = harga barang * jumlah beli
     $total = $hargaBarang * $jumlahBarang;
 
-    $query = "INSERT INTO penjualan (id_penjualan,kode_barang, jumlah_beli, total_harga) VALUE ('','$pilihBarang','$jumlahBarang','$total') ";
+    $query = "INSERT INTO penjualan (kode_barang, jumlah_beli, total_harga) VALUE ('$pilihBarang','$jumlahBarang','$total') ";
 
     mysqli_query($conn, $query);
 
