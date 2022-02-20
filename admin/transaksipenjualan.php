@@ -6,7 +6,9 @@
         header("location:../index.php");
     }
 
-    $data = mysqli_query($conn, "SELECT * FROM penjualan JOIN barang ON penjualan.kode_barang = barang.kode_barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk");
+
+    $data = mysqli_query($conn, "SELECT * FROM barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk JOIN suplier ON barang_masuk.id_suplier = suplier.id_suplier ");
+
 
 
 
@@ -15,12 +17,32 @@
     // pilih barang
 
 
-    if (isset($_POST['pilih'])) {
+    if (isset($_POST["add_to_cart"])) {
+        if (isset($_COOKIE["shopping_cart"])) {
+            $cookie_data = stripslashes($_COOKIE['shopping_cart']);
 
-      
+            $cart_data = json_decode($cookie_data, true);
+        } else {
+            $cart_data = array();
+        }
 
-      
-      
+        $item_id_list = array_column($cart_data, 'item_id');
+
+        if (in_array($_POST["hidden_id"], $item_id_list)) {
+            foreach ($cart_data as $keys => $values) {
+                if ($cart_data[$keys]["item_id"] == $_POST["hidden_id"]) {
+                    $cart_data[$keys]["item_quantity"] = $cart_data[$keys]["item_quantity"] + $_POST["quantity"];
+                }
+            }
+        } else {
+            $item_array = array(
+                'item_id'   => $_POST["hidden_id"],
+                'item_name'   => $_POST["hidden_name"],
+                'item_price'  => $_POST["hidden_price"],
+                'item_quantity'  => $_POST["quantity"]
+            );
+            $cart_data[] = $item_array;
+        }
 
         if (pilihbarang($_POST) > 0) {
             echo "
@@ -37,7 +59,54 @@
             </script>
         ";
         }
+
+        $item_data = json_encode($cart_data);
+        setcookie(
+            'shopping_cart',
+            $item_data,
+            time() + (86400 * 30)
+        );
     }
+
+    if (isset($_GET["action"])) {
+        if ($_GET["action"] == "delete") {
+            $cookie_data = stripslashes($_COOKIE['shopping_cart']);
+            $cart_data = json_decode($cookie_data, true);
+            foreach ($cart_data as $keys => $values) {
+                if ($cart_data[$keys]['item_id'] == $_GET["id"]) {
+                    unset($cart_data[$keys]);
+                    $item_data = json_encode($cart_data);
+                    setcookie("shopping_cart", $item_data, time() + (86400 * 30));
+                    header("location:transaksipenjualan.php?remove=1");
+                }
+            }
+        }
+        if ($_GET["action"] == "clear") {
+            setcookie("shopping_cart", "", time() - 3600);
+            header("location:transaksipenjualan.php?clearall=1");
+        }
+    }
+
+
+
+    if (isset($_GET["remove"])) {
+        $message = '
+ <div class="alert alert-success alert-dismissible">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  Item removed from Cart
+ </div>
+ ';
+    }
+    if (isset($_GET["clearall"])) {
+        $message = '
+ <div class="alert alert-success alert-dismissible">
+  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  Your Shopping Cart has been clear...
+ </div>
+ ';
+    }
+
+
 
     // form pembelian
     if (isset($_POST['simpan'])) {
@@ -84,6 +153,9 @@
      <link href="../assets/css/nucleo-svg.css" rel="stylesheet" />
      <!-- CSS Files -->
      <link id="pagestyle" href="../assets/css/argon-dashboard.css?v=2.0.0" rel="stylesheet" />
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+
  </head>
 
  <body class="g-sidenav-show   bg-gray-100">
@@ -231,41 +303,97 @@
                          <!-- Modal pilih barang -->
                          <div class="modal fade" id="pilihbarang" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                              <div class="modal-dialog modal-lg">
-                                 <form action="" method="POST">
-                                     <div class="modal-content">
-                                         <div class="modal-header">
-                                             <h5 class="modal-title" id="staticBackdropLabel">Pilih Barang</h5>
-                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                         </div>
-                                         <div class="modal-body">
-                                             <div class="input-group mb-3">
-                                                 <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" name="pilihbrg">
-                                                     <option selected>Pilih Barang</option>
 
-                                                     <?php $data1 = mysqli_query($conn, "SELECT * FROM barang JOIN barang_masuk ON barang.kode_barang_masuk = barang_masuk.kode_barang_masuk JOIN suplier ON barang_masuk.id_suplier = suplier.id_suplier");
-                                                        ?>
-                                                     <?php $i = 0; ?>
-                                                     <?php while ($pilihbarang = mysqli_fetch_assoc($data1)) : ?>
-                                                         <option value="<?= $pilihbarang['kode_barang']; ?>"><?= $pilihbarang['nama_barang']; ?> [RP. <?= $pilihbarang['harga_jual']; ?>]</option>
-                                                         <?php $i++ ?>
-                                                     <?php endwhile; ?>
-
-                                                 </select>
-                                             </div>
-
-                                             <div class="input-group mb-3">
-                                                 <span class="input-group-text" id="inputGroup-sizing-default">Jumlah Barang</span>
-                                                 <input type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="jumlahbrg">
-                                             </div>
-
-
-                                         </div>
-                                         <div class="modal-footer">
-                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                                             <button type="submit" class="btn btn-primary" name="pilih">Pilih Barang</button>
-                                         </div>
+                                 <div class="modal-content">
+                                     <div class="modal-header">
+                                         <h5 class="modal-title" id="staticBackdropLabel">Pilih Barang</h5>
+                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                      </div>
-                                 </form>
+                                     <div class="modal-body">
+
+
+                                         <!-- pilih barang yang akan dipilih -->
+                                         <div class="card-body px-0 pt-0 pb-2">
+
+                                             <div class="table-responsive p-0">
+                                                 <table class="table align-items-center mb-0">
+                                                     <thead>
+                                                         <tr>
+                                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
+
+                                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Barang</th>
+
+
+
+                                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Harga Jual</th>
+                                                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Jumlah Barang</th>
+                                                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                                         </tr>
+                                                     </thead>
+                                                     <?php $i = 1; ?>
+                                                     <?php while ($barang = mysqli_fetch_assoc($data)) : ?>
+                                                         <tbody>
+                                                             <form method="POST">
+                                                                 <tr scope="row">
+                                                                     <td>
+                                                                         <div class="d-flex px-2 py-1">
+
+                                                                             <div class="d-flex flex-column justify-content-center">
+                                                                                 <h6 class="mb-0 text-sm"><?= $i; ?></h6>
+
+                                                                             </div>
+                                                                         </div>
+                                                                     </td>
+
+                                                                     <td class="align-middle text-center text-sm">
+                                                                         <span class="badge badge-sm bg-gradient-success"><?= $barang["nama_barang"]; ?></span>
+                                                                     </td>
+
+
+
+                                                                     <td class="align-middle text-center">
+                                                                         <span class="text-secondary text-xs font-weight-bold">RP.<?= $barang["harga_jual"]; ?></span>
+                                                                     </td>
+                                                                     <td class="align-middle text-center">
+                                                                         <input type="number" name="quantity" value="1" class="form-control" />
+                                                                         <input type="hidden" name="hidden_name" value="<?php echo $barang["nama_barang"]; ?>" />
+                                                                         <input type="hidden" name="hidden_price" value="<?php echo $barang["harga_jual"]; ?>" />
+                                                                         <input type="hidden" name="hidden_id" value="<?php echo $barang["kode_barang"]; ?>" />
+                                                                     </td>
+
+                                                                     <td class="align-middle">
+
+                                                                         <button type="submit" class="btn " name="add_to_cart">
+                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FF8C00" class="bi bi-bag-plus" viewBox="0 0 16 16">
+                                                                                 <path fill-rule="evenodd" d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
+                                                                                 <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
+                                                                             </svg>
+                                                                         </button>
+                                                                     </td>
+                                                                 </tr>
+
+
+
+
+
+                                                             </form>
+
+                                                         </tbody>
+                                                         <?php $i++; ?>
+                                                     <?php endwhile; ?>
+                                                 </table>
+                                             </div>
+                                         </div>
+                                         <!-- akhir -->
+
+
+                                     </div>
+                                     <div class="modal-footer">
+                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+
+                                     </div>
+                                 </div>
+
                              </div>
                          </div>
                      </div>
@@ -285,76 +413,87 @@
                                  </tr>
 
                              </thead>
+                             <?php
+                                if (isset($_COOKIE["shopping_cart"])) {
+                                    $total = 0;
+                                    $cookie_data = stripslashes($_COOKIE['shopping_cart']);
+                                    $cart_data = json_decode($cookie_data, true);
+                                    foreach ($cart_data as $keys => $values) {
+                                ?>
 
+                                     <tbody>
+                                         <tr scope="row">
+                                             <td>
+                                                 <div class="d-flex px-2 py-1">
 
-                             <?php $i = 1; ?>
+                                                     <div class="d-flex flex-column justify-content-center">
+                                                         <h6 class="mb-0 text-sm">1</h6>
 
-
-                             <?php while ($penjualan = mysqli_fetch_assoc($data)) :  ?>
-
-
-                                 <tbody>
-                                     <tr scope="row">
-                                         <td>
-                                             <div class="d-flex px-2 py-1">
-
-                                                 <div class="d-flex flex-column justify-content-center">
-                                                     <h6 class="mb-0 text-sm"><?= $i; ?></h6>
-
+                                                     </div>
                                                  </div>
-                                             </div>
+                                             </td>
+                                             <td>
+
+
+                                                 <p class="text-xs font-weight-bold mb-0"><?php echo $values["item_name"]; ?></p>
+
+
+
+
+                                             </td>
+                                             <td class="align-middle text-center text-sm">
+                                                 <span class="text-secondary text-xs font-weight-bold">RP. <?php echo $values["item_price"]; ?></span>
+                                             </td>
+                                             <td class="align-middle text-center">
+                                                 <span class="text-secondary text-xs font-weight-bold"><?php echo $values["item_quantity"]; ?></span>
+                                             </td>
+                                             <td class="align-middle text-center">
+                                                 <span class="text-secondary text-xs font-weight-bold"><?php echo number_format($values["item_quantity"] * $values["item_price"], 2); ?></span>
+                                             </td>
+
+
+
+                                             <td class="align-middle">
+
+
+                                                 <a href="transaksipenjualan.php?action=delete&id=<?php echo $values["item_id"]; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Hapus">
+                                                     <button type="button" class="btn">
+                                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                                             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                                         </svg>
+
+                                                     </button>
+                                                 </a>
+                                             </td>
+                                         </tr>
+                                     <?php
+                                        $total = $total + ($values["item_quantity"] * $values["item_price"]);
+                                    }
+                                        ?>
+
+
+
+                                     <tr>
+                                         <td colspan="4" class="align-middle text-center">
+                                             <span class="text-secondary text-xs font-weight-bold">SUB TOTAL</span>
                                          </td>
-                                         <td>
-                                           
-
-                                             <p class="text-xs font-weight-bold mb-0"><?= $penjualan['nama_barang']; ?></p>
-
-
-
-
-                                         </td>
-                                         <td class="align-middle text-center text-sm">
-                                             <span class="text-secondary text-xs font-weight-bold">RP.<?= $penjualan['harga_jual']; ?></span>
-                                         </td>
-                                         <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold"><?= $penjualan['jumlah_beli']; ?></span>
-                                         </td>
-                                         <td class="align-middle text-center">
-                                             <span class="text-secondary text-xs font-weight-bold">RP.<?= $penjualan['total_harga']; ?></span>
-                                         </td>
-
-
-
-                                         <td class="align-middle">
-
-
-                                             <!-- <a href="../del/delkrjblnj.php?delbelanja=<?= $penjualan['id_penjualan']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                                 <button type="button" class="btn">
-                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
-                                                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                                         <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-                                                     </svg>
-
-                                                 </button>
-                                             </a> -->
-                                         </td>
+                                         <td colspan="" class="align-middle text-start"> <span class="text-secondary text-xs font-weight-bold">RP. <?php echo number_format($total, 2); ?></span></td>
                                      </tr>
-                                     <?php $i++ ?>
-                                 <?php endwhile; ?>
-
-                                 <?php $sql = mysqli_query($conn, "SELECT sum(total_harga) as subtotal from penjualan;");
-                                    $subtotal = mysqli_fetch_array($sql); ?>
-                                 <tr>
-                                     <td colspan="4" class="align-middle text-center">
-                                         <span class="text-secondary text-xs font-weight-bold">SUB TOTAL</span>
-                                     </td>
-                                     <td colspan="" class="align-middle text-start"> <span class="text-secondary text-xs font-weight-bold">RP.<?= $subtotal['subtotal']; ?></span></td>
-                                 </tr>
+                                 <?php
+                                } else {
+                                    echo '
+    <tr>
+     <td colspan="5" align="center">No Item in Cart</td>
+    </tr>
+    ';
+                                }
+                                    ?>
 
 
 
 
-                                 </tbody>
+                                     </tbody>
                          </table>
                      </div>
                  </div>

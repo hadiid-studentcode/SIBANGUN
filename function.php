@@ -412,42 +412,14 @@ function pilihbarang($data)
 {
     global $conn;
 
-    $pilihBarang = ($data['pilihbrg']);
-    $jumlahBarang = ($data['jumlahbrg']);
-
-    
-
-
+    $kodebarang = ($data['hidden_id']);
+    $jumlahBarang = ($data['quantity']);
+    $hargajual = ($data['hidden_price']);
+    $total_harga = $hargajual *  $jumlahBarang;
 
 
 
-
-
-
-    $data = mysqli_query($conn, "SELECT harga_jual from barang WHERE kode_barang = $pilihBarang");
-    $hargabrg = mysqli_fetch_array($data);
-
-    $hargaBarang = $hargabrg['harga_jual'];
-    // mencari total harga dari jumlah yang dibeli
-    // total = harga barang * jumlah beli
-
-
-
-
-
-
-    //     $total = $hargaBarang * $cookieJumlah;
-
-
-    $data = mysqli_query($conn, "SELECT harga_jual from barang WHERE kode_barang = $pilihBarang");
-    $hargabrg = mysqli_fetch_array($data);
-
-    $hargaBarang = $hargabrg['harga_jual'];
-    // mencari total harga dari jumlah yang dibeli
-    // total = harga barang * jumlah beli
-    $total = $hargaBarang * $jumlahBarang;
-
-    $query = "INSERT INTO penjualan (kode_barang, jumlah_beli, total_harga) VALUE ('$pilihBarang','$jumlahBarang','$total') ";
+    $query = "INSERT INTO penjualan (kode_barang, jumlah_beli, total_harga) VALUE ('$kodebarang','$jumlahBarang','$total_harga') ";
 
     mysqli_query($conn, $query);
 
@@ -459,6 +431,9 @@ function pilihbarang($data)
 
 function formbeli($data)
 {
+
+
+
     global $conn;
 
     $namaPembeli = ($data['nmpembeli']);
@@ -470,11 +445,30 @@ function formbeli($data)
     $kodetransaksi = date('Ymd');
 
     // mencari uang kembalian
-    $data = mysqli_query($conn, "SELECT sum(total_harga) as subtotal from penjualan;");
-    $hasil = mysqli_fetch_array($data);
-    $subTotal = $hasil['subtotal'];
-    // uang kembalian = uang dibayar - sub total
-    $uangkembalian = $uangDibayar - $subTotal;
+
+    if (isset($_COOKIE["shopping_cart"])) {
+        $total = 0;
+        $cookie_data = stripslashes($_COOKIE['shopping_cart']);
+        $cart_data = json_decode($cookie_data, true);
+        foreach ($cart_data as $keys => $values) {
+
+            $total = $total + ($values["item_quantity"] * $values["item_price"]);
+        }
+        $subTotal = number_format($total, 2);
+        $uangdibayar = number_format($uangDibayar, 2);
+    }
+   
+    $uangkembalian = $uangDibayar - $total;
+    
+    
+  
+
+   
+
+
+
+
+
 
 
 
@@ -485,7 +479,7 @@ function formbeli($data)
                 '$kodetransaksi',
                 '$tgl',
                 '$namaPembeli',
-                '$subTotal',
+                '$total',
                 '$uangkembalian',
                 '$jenisPembayaran',
                 '$keterangan',
