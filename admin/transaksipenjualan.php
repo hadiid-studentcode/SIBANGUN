@@ -17,7 +17,10 @@
 
     if (isset($_POST['pilih'])) {
 
+      
 
+      
+      
 
         if (pilihbarang($_POST) > 0) {
             echo "
@@ -302,9 +305,10 @@
                                              </div>
                                          </td>
                                          <td>
-
+                                           
 
                                              <p class="text-xs font-weight-bold mb-0"><?= $penjualan['nama_barang']; ?></p>
+
 
 
 
@@ -324,7 +328,7 @@
                                          <td class="align-middle">
 
 
-                                             <a href="../del/delkrjblnj.php?delbelanja=<?= $penjualan['id_penjualan']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                             <!-- <a href="../del/delkrjblnj.php?delbelanja=<?= $penjualan['id_penjualan']; ?>" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                                  <button type="button" class="btn">
                                                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
                                                          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -332,7 +336,7 @@
                                                      </svg>
 
                                                  </button>
-                                             </a>
+                                             </a> -->
                                          </td>
                                      </tr>
                                      <?php $i++ ?>

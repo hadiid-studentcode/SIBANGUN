@@ -415,6 +415,8 @@ function pilihbarang($data)
     $pilihBarang = ($data['pilihbrg']);
     $jumlahBarang = ($data['jumlahbrg']);
 
+    
+
 
 
 
